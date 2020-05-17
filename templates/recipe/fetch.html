@@ -1,0 +1,7 @@
+<form action="{% url 'fetch' %}" method="POST">
+    {% csrf_token %}
+    <input type="password" name="username" placeholder="Secret Key">
+    <input type="text" name="number" placeholder="number of posts to fetch">
+    <input type="submit">
+</form>
+{{message}}
