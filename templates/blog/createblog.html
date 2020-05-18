@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+    <script src="https://cdn.tiny.cloud/1/ywpnkzaov1w9e799e3f5d9fanfbjbw7adhztywgwyoqk8xx1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+</head>
+<style>
+    body {
+        text-align: center;
+    }
+    
+    select {
+        width: 200px;
+        height: 200px;
+    }
+
+    input {
+        width: 250px;
+        height: 30px;
+        font-size: 1.5rem;
+    }
+    textarea {
+        height: 500px;
+    }
+    button {
+        font-size: 1.2rem;
+        background-color: #0779e4;
+        color: white;
+        outline: none;
+        border: none;
+    }
+    button:hover {
+        cursor: pointer;
+    }
+</style>
+<body>
+    <form action="{% url 'create-blog' %}" method="POST">
+        {% csrf_token %}
+        <a href="/admin-1/all-posts"><h3>Back</h3></a>
+        <h1>Create New Post</h1>
+        <input type="text" name="title" placeholder="Title">
+        <div>
+            <br><br>
+            <input type="text" name="imgurl" placeholder="FeatureImage URL">
+        </div>
+        <br><br>
+        <textarea name="body"></textarea>
+        <br><br>
+        <input type="text" name="author" placeholder="Author">
+        <h3>Categories</h3>
+        <select multiple name="category">
+            {% for category in categories %}
+            <option value="{{category.id}}"></option>
+            {% endfor %}
+        </select>
+        <h3>Tags</h3>
+        <select multiple name="tag">
+            {% for tag in tags %}
+            <option value="{{tag.id}}">{{tag.tag}}</option>
+            {% endfor %}
+        </select>
+
+        <input type="text" id="changer" name="option" style="display: none;" value="">
+
+        <div>
+            <br><br>
+            <button onclick="preview()">Preview</button>
+            <button onclick="post()">Post</button>
+            <br><br><br>
+        </div>
+
+    </form>
+        
+        
+        <script>
+            tinymce.init({
+              selector: 'textarea',
+              plugins: 'media image',
+              toolbar: 'media image',
+              toolbar_mode: 'floating',
+            });
+
+            function preview() {
+                document.getElementById("changer").value = "preview";
+            }
+            function post() {
+                document.getElementById("changer").value = "post";
+            }
+        </script>
+    
+</body>
+</html>

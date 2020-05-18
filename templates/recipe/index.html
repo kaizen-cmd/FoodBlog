@@ -34,7 +34,7 @@
               <a href="#">Dish Type</a>
               <ul class="uk-nav-sub">
                 {% for tag in tags %}
-                <li><a href="/{{tag.tag}}/">{{tag.tag}}</a></li>
+                <li><a href="/{{tag.tag}}/1/">{{tag.tag}}</a></li>
                 {% endfor %}
               </ul>
             </li>
@@ -58,7 +58,7 @@
               <a href="#">Diet and Health</a>
               <ul class="uk-nav-sub">
                 {% for diettyp in dietypes %}
-                <li><a href="/diettype/{{diettyp.diettype}}">{{diettyp.diettype}}</a></li>
+                <li><a href="/diettype/{{diettyp.diettype}}/1">{{diettyp.diettype}}</a></li>
                 {% endfor %}
               </ul>
             </li>
@@ -93,7 +93,7 @@
             {% for obj in all_recipes %}
             <div class="uk-card">
               <div class="uk-card-media-top uk-inline uk-light">
-                <img class="uk-border-rounded-medium" src="{{obj.image_url}}" alt="Course Title">
+                <img class="uk-border-rounded-medium" src="{{obj.image_url}}" alt="{{obj.title}}">
                 <div class="uk-position-cover uk-card-overlay uk-border-rounded-medium"></div>
               </div>
               <div>
@@ -125,9 +125,23 @@
 </div>
 
 <div style="text-align: center;">
-  <img src="https://via.placeholder.com/400x300" alt="" style="height: 400px; width: 300px; margin: 0px 30px 10px 30px;">
-  <img src="https://via.placeholder.com/400x300" alt="" style="height: 400px; width: 300px; margin: 0px 30px 10px 30px;">
-  <img src="https://via.placeholder.com/400x300" alt="" style="height: 400px; width: 300px; margin: 0px 30px 10px 30px;">
+  <div class="uk-child-width-1-2 uk-child-width-1-4@s" data-uk-grid>
+  {% for rnd_blg in rand_blog %}
+  <div>
+    <div class="uk-card uk-card-video">
+      <div class="uk-inline uk-light">
+        <img class="uk-border-rounded-large" src="{{rnd_blg.img}}" alt="{{rnd_blg.title}}" style="width: 300; height: 400;">
+        <div class="uk-position-cover uk-card-overlay uk-border-rounded-large"></div>
+        <div class="uk-position-small uk-position-bottom-left">
+          <h5 class="uk-margin-small-bottom">{{rnd_blg.title}}</h5>
+          <div class="uk-text-xsmall">by {{rnd_blg.author}}</div>
+        </div>
+      </div>
+      <a href="/blog/{{rnd_blg.slug}}/" class="uk-position-cover"></a>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
 </div>
 
 <br><br>

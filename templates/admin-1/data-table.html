@@ -77,7 +77,7 @@
     </li>
 
     <li class="dropdown link">
-      <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="img/profileimg.png" alt="img"><b>Jonathan Doe</b><span class="caret"></span></a>
+      <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><b>Hello, {{username}}</b><span class="caret"></span></a>
         <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
           <li role="presentation" class="dropdown-header">Profile</li>
           <li><a href="#"><i class="fa falist fa-inbox"></i>Inbox<span class="badge label-danger">4</span></a></li>
@@ -85,7 +85,7 @@
           <li><a href="#"><i class="fa falist fa-wrench"></i>Settings</a></li>
           <li class="divider"></li>
           <li><a href="#"><i class="fa falist fa-lock"></i> Lockscreen</a></li>
-          <li><a href="#"><i class="fa falist fa-power-off"></i> Logout</a></li>
+          <li><a href="/logout"><i class="fa falist fa-power-off"></i> Logout</a></li>
         </ul>
     </li>
 
@@ -103,7 +103,7 @@
 
 <ul class="sidebar-panel nav">
   <li class="sidetitle">MAIN</li>
-  <li><a href="index.html"><span class="icon color5"><i class="fa fa-home"></i></span>Dashboard<span class="label label-default">2</span></a></li>
+  <li><a href="/admin-1/"><span class="icon color5"><i class="fa fa-home"></i></span>Dashboard<span class="label label-default">2</span></a></li>
   <li><a href="mailbox.html"><span class="icon color6"><i class="fa fa-envelope-o"></i></span>Mailbox<span class="label label-default">19</span></a></li>
   <li><a href="#"><span class="icon color7"><i class="fa fa-flask"></i></span>UI Elements<span class="caret"></span></a>
     <ul>
@@ -243,7 +243,6 @@
                         <th>Title</th>
                         <th>Author</th>
                         <th>Date</th>
-                        <th>Published</th>
                     </tr>
                 </thead>
              
@@ -254,7 +253,6 @@
                         <td>{{blog.title}}</td>
                         <td>{{blog.author}}</td>
                         <td>{{blog.created}}</td>
-                        <td>{{blog.show}}</td>
                   {% endfor %}
                     </tr>
                 </tbody>

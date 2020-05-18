@@ -16,7 +16,93 @@
 
 {% block title %} Home {% endblock title %}
 
+{% block sdata %}
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org/",
+    "@type": "Recipe",
+    "name": "{{recipe.title}}",
+    "image": [
+        "{{recipe.image_url}}"
+    ],
+    "author": {
+        "@type": "Person",
+        "name": "{{recipe.by}}"
+    },
+    "datePublished": "2018-03-10",
+    "description": "{{recipe.descreption | striptags | safe}}",          
+    "prepTime": "PT20M",
+    "cookTime": "PT30M",
+    "totalTime": "PT{{recipe.cooking_time}}M",
+    "recipeYield": "{{recipe.yields}}",
+    "recipeCategory": "Dessert",
+    "recipeCuisine": "{{recipe.cuisine}}",
+    "keywords": "{% for tag in recipe.tags.all %}{{tag.tag}},{% endfor %}",
+    "nutrition": {
+        "@type": "NutritionInformation",
+        "calories": "{{recipe.cal}}"
+    },
+    "recipeIngredient": [
+      {% for ingredient in recipe.ingredients.all %}
+        "{{ingredient.ingredient}}",
+      {% endfor %}
+       ],
+    "recipeInstructions": [
+    {% for step in recipe.instructions.all %}
+          {
+          "@type": "HowToStep",
+          "text": "{{step.step}}"
+          },
+    {% endfor %}
+      ],
+    "video": [
+        {
+        "@type": "VideoObject", 
+        "name": "How to make a Party Coffee Cake",
+        "description": "This is how you make a Party Coffee Cake.",
+        "thumbnailUrl": [
+          "https://example.com/photos/1x1/photo.jpg",
+          "https://example.com/photos/4x3/photo.jpg",
+          "https://example.com/photos/16x9/photo.jpg"
+         ],
+        "contentUrl": "http://www.example.com/video123.flv",
+        "embedUrl": "http://www.example.com/videoplayer.swf?video=123",
+        "uploadDate": "2018-02-05T08:00:00+08:00",
+        "duration": "PT1M33S",
+        "interactionStatistic": {
+          "@type": "InteractionCounter",
+          "interactionType": { "@type": "http://schema.org/WatchAction" },
+          "userInteractionCount": 2347
+        },
+        "expires": "2019-02-05T08:00:00+08:00"
+       }
+      ],
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "ratingCount": "18"
+        },
+    "review": {
+        "@type": "Review",
+        "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "4",
+            "bestRating": "5"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "{{recipe.by}}"
+        },
+        "datePublished": "2018-05-01",
+        "reviewBody": "This cake is delicious!",
+        "publisher": "The cake makery"
+        }
+     }
+</script>
+{% endblock sdata %}
+
 {% block body %}
+
 <div class="uk-container">
   <div data-uk-grid>
     <div class="uk-width-1-2@s">
@@ -29,9 +115,14 @@
         <p>{{recipe.descreption | striptags | safe}}</p>
         <div class="uk-margin-medium-top uk-child-width-expand uk-text-center uk-grid-divider" data-uk-grid>
           <div>
-            <span data-uk-icon="icon: future; ratio: 1.4"></span>
+            <span data-uk-icon="icon: clock; ratio: 1.4"></span>
             <h5 class="uk-text-500 uk-margin-small-top uk-margin-remove-bottom">Total Time</h5>
             <span class="uk-text-small">{{recipe.cooking_time}} mins</span>
+          </div>
+          <div>
+            <span data-uk-icon="icon: future; ratio: 1.4"></span>
+            <h5 class="uk-text-500 uk-margin-small-top uk-margin-remove-bottom">Calories</h5>
+            <span class="uk-text-small">{{recipe.cal}}</span>
           </div>
           <div>
             <span data-uk-icon="icon: users; ratio: 1.4"></span>
@@ -139,10 +230,10 @@
           <div>
             <h3 class="uk-card-title uk-text-500 uk-margin-small-bottom uk-margin-top">{{recipe.title}}</h3>
             <div class="uk-text-xsmall uk-text-muted" data-uk-grid>
-              <div class="uk-width-expand uk-text-right"> by {{recipe.by}}</div>
+              <div class="uk-width-expand uk-text-right">by {{recipe.by}}</div>
             </div>
           </div>
-          <a href="/recipe/dish/{{recipe.slug}}" class="uk-position-cover"></a>
+          <a href="/dish/{{recipe.slug}}" class="uk-position-cover"></a>
         </div>
       </div>
       {% endfor %}
