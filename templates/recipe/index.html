@@ -34,31 +34,31 @@
               <a href="#">Dish Type</a>
               <ul class="uk-nav-sub">
                 {% for tag in tags %}
-                <li><a href="/recipe/{{tag.tag}}/">{{tag.tag}}</a></li>
+                <li><a href="/{{tag.tag}}/">{{tag.tag}}</a></li>
                 {% endfor %}
               </ul>
             </li>
             <li class="uk-parent">
               <a href="#">Meal Type</a>
               <ul class="uk-nav-sub">
-                <li><a href="/recipe/mealtypes/main course">main course</a></li>
-                <li><a href="/recipe/mealtypes/dessert">dessert</a></li>
-                <li><a href="/recipe/mealtypes/appetizer">appetizer</a></li>
-                <li><a href="/recipe/mealtypes/salad">salad</a></li>
-                <li><a href="/recipe/mealtypes/beverage">beverage</a></li>
-                <li><a href="/recipe/mealtypes/soup">soup</a></li>
-                <li><a href="/recipe/mealtypes/snack">snack</a></li>
-                <li><a href="/recipe/mealtypes/sauce">sauce</a></li>
-                <li><a href="/recipe/mealtypes/marinade">marinade</a></li>
-                <li><a href="/recipe/mealtypes/fingerfood">fingerfood</a></li>
-                <li><a href="/recipe/mealtypes/drink">drink</a></li>
+                <li><a href="/mealtypes/main course">main course</a></li>
+                <li><a href="/mealtypes/dessert">dessert</a></li>
+                <li><a href="/mealtypes/appetizer">appetizer</a></li>
+                <li><a href="/mealtypes/salad">salad</a></li>
+                <li><a href="/mealtypes/beverage">beverage</a></li>
+                <li><a href="/mealtypes/soup">soup</a></li>
+                <li><a href="/mealtypes/snack">snack</a></li>
+                <li><a href="/mealtypes/sauce">sauce</a></li>
+                <li><a href="/mealtypes/marinade">marinade</a></li>
+                <li><a href="/mealtypes/fingerfood">fingerfood</a></li>
+                <li><a href="/mealtypes/drink">drink</a></li>
               </ul>
             </li>
             <li class="uk-parent">
               <a href="#">Diet and Health</a>
               <ul class="uk-nav-sub">
                 {% for diettyp in dietypes %}
-                <li><a href="/recipe/diettype/{{diettyp.diettype}}">{{diettyp.diettype}}</a></li>
+                <li><a href="/diettype/{{diettyp.diettype}}">{{diettyp.diettype}}</a></li>
                 {% endfor %}
               </ul>
             </li>
@@ -66,7 +66,7 @@
               <a href="#">World Cuisine</a>
               <ul class="uk-nav-sub">
                 {% for cuisin in cuisine %}
-                <li><a href="/recipe/cuisine/{{cuisin.cuisine}}">{{cuisin.cuisine}}</a></li>
+                <li><a href="/cuisine/{{cuisin.cuisine}}">{{cuisin.cuisine}}</a></li>
                 {% endfor %}
               </ul>
             </li>
@@ -102,7 +102,7 @@
                   <div class="uk-width-expand uk-text-right">by {{obj.by}}</div>
                 </div>
               </div>
-              <a href="/recipe/dish/{{obj.slug}}" class="uk-position-cover"></a>
+              <a href="/dish/{{obj.slug}}" class="uk-position-cover"></a>
             </div>
           </div>
           <div>
@@ -110,8 +110,8 @@
       </div>
       <div class="uk-margin-large-top uk-text-small">
         <ul class="uk-pagination uk-flex-center uk-text-500 uk-margin-remove" data-uk-margin>
-          <li><a href="/recipe/{{prev}}"><span data-uk-pagination-previous>Previous&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;</a></li>
-          <li><a href="/recipe/{{next}}"><span data-uk-pagination-next></span>&nbsp;&nbsp;&nbsp;Next</a></li>
+          <li><a href="/{{prev}}"><span data-uk-pagination-previous>Previous&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;</a></li>
+          <li><a href="/{{next}}"><span data-uk-pagination-next></span>&nbsp;&nbsp;&nbsp;Next</a></li>
         </ul>
         <br><br><br>
       </div>

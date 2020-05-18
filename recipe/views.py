@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib import auth
 import requests, json
 from .models import Recipe, Ingredient, Tag, Step, DietType, Cuisine, BlogPost
 from django.utils.text import slugify
@@ -14,20 +16,37 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 def admin_1(request):
-    return render(request, "recipe/index-1.html")
-
-def blogadmin(request):
     if request.method == "POST":
-        title = request.POST['title']
-        slug = slugify(unicode(title))
-        blogbody = request.POST['blogpost']
-        author = request.POST['author']
-        BlogPost.objects.create(title=title, slug=slug, body=blogbody, author=author)
-        cotext = {
-            'message': 'Blog Created Successfylly'
-        }
+        username = request.POST['username']
+        password = request.POST['password']
+        user_auth = auth.authenticate(username=username, password=password)
+        if user_auth is not None:
+            if User.is_superuser:
+                auth.login(request, user_auth)
+                context = {
+                    'username': username
+                }
+        else:
+            context = {
+                'message': 'Either Wrong credentials or not a superuser'
+            }
+        return render(request, "admin-1/index.html", context)
     else:
-        return render(request, "recipe/blogadmin.html")
+        return render(request, 'admin-1/login.html')
+
+def logout(request):
+    auth.logout(request)   
+    return redirect('/admin-1')
+
+def all_posts(request):
+    all_blogs = BlogPost.objects.all()
+    context = {
+        'all_blogs': all_blogs,
+    }
+    return render(request, "admin-1/data-table.html", context)
+
+def create_blog(request):
+    pass
 
 def redirector(request):
     return redirect("/recipe/1/") 
@@ -170,7 +189,34 @@ def fetch(request):
 # Create your views here.
 def index(request, page_no):
     queryset = Recipe.objects.all()
-    p = Paginator(queryset, 9)
+    p = Paginator(queryset, 6)
+    li = list(p.page_range)
+    queryset = p.page(page_no).object_list
+    tags_qset = Tag.objects.all()
+    cuisine = Cuisine.objects.all()
+    diettypes = DietType.objects.all()
+    nxt_pg = page_no + 1
+    prv_pg = page_no - 1
+    if nxt_pg > li[-1]:
+        nxt_pg = page_no
+    if prv_pg < 1:
+        prv_pg = 1
+    context = {
+        'all_recipes': queryset,
+        'tags': tags_qset,
+        'cuisine': cuisine,
+        'dietypes': diettypes,
+        'var_title': 'Recipes',
+        'next': nxt_pg,
+        'prev': prv_pg
+    }
+
+    return render(request, 'recipe/index.html', context)
+
+def index1(request):
+    page_no = 1
+    queryset = Recipe.objects.all()
+    p = Paginator(queryset, 6)
     li = list(p.page_range)
     queryset = p.page(page_no).object_list
     tags_qset = Tag.objects.all()

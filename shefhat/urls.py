@@ -17,11 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect
 
-def redirector(request):
-    return redirect("/recipe/1/") 
-
 urlpatterns = [
-    path('', redirector),
     path('admin/', admin.site.urls),
-    path('recipe/', include('recipe.urls')),
+    path('', include('recipe.urls')),
 ]

@@ -8,6 +8,12 @@ class Tag(models.Model):
     def __str__(self):
         return self.tag
 
+class Category(models.Model):
+    category = models.TextField(unique=True)
+
+    def __str__(self):
+        return self.category
+
 class Ingredient(models.Model):
     ingredient = models.TextField(unique=True)
 
@@ -54,5 +60,7 @@ class BlogPost(models.Model):
     slug = models.SlugField()
     body = models.TextField()
     author = models.TextField()
-    tags = models.ManyToManyField()
+    categories = models.ManyToManyField(to=Category)
+    tags = models.ManyToManyField(to=Tag)
+    created = models.DateTimeField(auto_now_add=True)
     show = models.BooleanField(default=False)

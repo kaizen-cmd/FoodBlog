@@ -2,10 +2,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.redirector, name='redirect'),
+    path("", views.index1),
     path("<int:page_no>/", views.index, name="index"),
     path("admin-1/", views.admin_1, name="admin_1"),
-    path("blog-admin/", views.blogadmin, name="blog_admin"),
+    path("logout/", views.logout, name="logout"),
+    path("admin-1/all-posts", views.all_posts, name="all_posts"),
+    path("admin-1/create-blog", views.create_blog, name="create-blog"),
     path("dish/<str:r_name>/", views.recipe, name="recipe"),
     path("contact/", views.contact, name="contact"),
     path("search/", views.search, name="search"),

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block meta_desc %}
-{{recipe.descreption}}
+{{recipe.descreption | striptags | safe}}
 {% endblock meta_desc %}
 
 {% block meta_title %}
@@ -21,12 +21,12 @@
   <div data-uk-grid>
     <div class="uk-width-1-2@s">
       <div><img class="uk-border-rounded-large" src="{{recipe.image_url}}" 
-        alt="Image alt"></div>
+        alt="{{recipe.title}}"></div>
     </div>
     <div class="uk-width-expand@s uk-flex uk-flex-middle">
       <div>
         <h1>{{recipe.title}}</h1>
-        <p>{{recipe.descreption | safe}}</p>
+        <p>{{recipe.descreption | striptags | safe}}</p>
         <div class="uk-margin-medium-top uk-child-width-expand uk-text-center uk-grid-divider" data-uk-grid>
           <div>
             <span data-uk-icon="icon: future; ratio: 1.4"></span>
