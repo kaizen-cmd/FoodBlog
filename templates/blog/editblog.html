@@ -36,7 +36,7 @@
     }
 </style>
 <body>
-    <form action="/blog/edit/{{slug}}/" method="POST">
+    <form action="/blog/edit/{{slug}}/" method="POST" target="_blank">
         {% csrf_token %}
         <a href="/admin-1/all-posts"><h3>Back</h3></a>
         <h1>Create New Post</h1>
@@ -55,6 +55,7 @@
             <option value="{{category.id}}"></option>
             {% endfor %}
         </select>
+        <label for="" style="display: block; font-size: 1.2rem; color:grey">Hold down ctrl on windows and cmd on mac to select multiple</label>
         <h3>Tags</h3>
         <select multiple name="tag">
             {% for tag in tags %}

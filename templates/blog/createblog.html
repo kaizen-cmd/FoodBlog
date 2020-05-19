@@ -36,7 +36,7 @@
     }
 </style>
 <body>
-    <form action="{% url 'create-blog' %}" method="POST">
+    <form action="{% url 'create-blog' %}" method="POST" target="_blank">
         {% csrf_token %}
         <a href="/admin-1/all-posts"><h3>Back</h3></a>
         <h1>Create New Post</h1>
@@ -52,15 +52,19 @@
         <h3>Categories</h3>
         <select multiple name="category">
             {% for category in categories %}
-            <option value="{{category.id}}"></option>
+            <option value="{{category.id}}">{{category.category}}</option>
             {% endfor %}
         </select>
+        <a href="/admin/recipe/category/add/?_to_field=id&_popup=1" style="display: block;" target="_blank">Add Category</a>
+        <br><br>
+        <label for="" style="display: block; font-size: 1.2rem; color:grey">Hold down ctrl on windows and cmd on mac to select multiple</label>
         <h3>Tags</h3>
         <select multiple name="tag">
             {% for tag in tags %}
             <option value="{{tag.id}}">{{tag.tag}}</option>
             {% endfor %}
         </select>
+        <a href="/admin/recipe/tag/add/?_to_field=id&_popup=1" style="display: block;" target="_blank">Add Tag</a>
 
         <input type="text" id="changer" name="option" style="display: none;" value="">
 
