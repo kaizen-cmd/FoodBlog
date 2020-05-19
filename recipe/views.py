@@ -248,7 +248,7 @@ def fetch(request):
         return render(request, "recipe/fetch.html")
 
 def index(request, page_no):
-    queryset = Recipe.objects.all()
+    queryset = Recipe.objects.all().reverse()
     p = Paginator(queryset, 6)
     li = list(p.page_range)
     queryset = p.page(page_no).object_list
@@ -284,7 +284,7 @@ def index(request, page_no):
 
 def index1(request):
     page_no = 1
-    queryset = Recipe.objects.all()
+    queryset = Recipe.objects.all().reverse()
     p = Paginator(queryset, 6)
     li = list(p.page_range)
     queryset = p.page(page_no).object_list
@@ -516,12 +516,7 @@ def filter_cuisine(request, cuisine):
     }
     return render(request, 'recipe/index.html', context)
 
-offset1 = 0
 def search(request):
-    global offset1
-    if offset1 > 899:
-        offset1 = 1
-    offset1 += 3
     flag = False
     query = request.POST['query']
 
@@ -534,8 +529,7 @@ def search(request):
         params = {
             'apiKey': '98756d2aa51b45ad86ebac98e8bda863',
             'query': query,
-            'offset': offset1,
-            'number': 6,
+            'number': '12',
         }
         headers = {
             'Content-Type': 'application/json'
@@ -564,7 +558,7 @@ def search(request):
             try:
                 image_url = random_recipe['image']
             except:
-                image_url = "https://via.placeholder.com/300x160"
+                image_url = "https://via.placeholder.com/300x190"
             
             try:
                 descreption = random_recipe['summary']
