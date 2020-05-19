@@ -264,9 +264,9 @@ def index(request, page_no):
     rand_blog = list(BlogPost.objects.all())
     try:
         try:
-            random_items = random.sample(rand_blog, 3)
+            random_items = random.sample(rand_blog, 4)
         except:
-            random_items = random.sample(rand_blog, Recipe.objects.count())
+            random_items = random.sample(rand_blog, Recipe.objects.all().count())
     except:
         random_items = []
     context = {
@@ -300,9 +300,9 @@ def index1(request):
     rand_blog = list(BlogPost.objects.all())
     try:
         try:
-            random_items = random.sample(rand_blog, 3)
+            random_items = random.sample(rand_blog, 4)
         except:
-            random_items = random.sample(rand_blog, 1)
+            random_items = random.sample(rand_blog, BlogPost.objects.all().count())
     except:
         random_items = []
 
@@ -691,13 +691,71 @@ def tag_search(request, tag, page_no):
     }
     return render(request, 'recipe/index.html', context)
 
+def editblog(request, blg_name):
+    if request.method == "GET":
+        tags = Tag.objects.all()
+        categories = Category.objects.all()
+        blg_inst = BlogPost.objects.get(slug=blg_name)
+        context = {
+            'title': blg_inst.title,
+            'imgurl': blg_inst.img,
+            'body': blg_inst.body,
+            'author': blg_inst.author,
+            'tags': tags,
+            'categories': categories,
+            'slug': blg_inst.slug,
+        }
+        return render(request, "blog/editblog.html", context)
+
+    else:
+        title = request.POST['title']
+        featimgurl = request.POST['imgurl']
+        body = request.POST['body']
+        author = request.POST['author']
+        tags = request.POST.getlist('tag')
+        categories = request.POST.getlist('category')
+        option = request.POST['option']
+        rand_blog = list(BlogPost.objects.all())
+        try:
+            try:
+                random_items = random.sample(rand_blog, 3)
+            except:
+                random_items = random.sample(rand_blog, Recipe.objects.count())
+        except:
+            random_items = []
+        context = {
+            "title": title,
+            "imgurl": featimgurl,
+            "body": body,
+            "date": datetime.datetime.now(),
+            "author": author,
+            "tags": tags,
+            "categories": categories,
+            "rand_blog": list(random_items)
+        }
+        if option == "preview":
+            return render(request, "blog/blogpost.html", context)
+        else:
+            blg_inst = BlogPost.objects.get(slug=blg_name)
+            blg_inst.title = title
+            blg_inst.img = featimgurl
+            blg_inst.body = body
+            blg_inst.date = datetime.datetime.now()
+            blg_inst.author = author
+            for tag in tags:
+                blg_inst.tags.add(tag)
+            for category in categories:
+                blg_inst.categories.add(category)
+            blg_inst.save()
+            return redirect("/admin-1/all-posts/")
+
 def renderblog(request, blg_name):
     blg_inst = BlogPost.objects.get(slug=blg_name)
     rand_blog = list(BlogPost.objects.all())
     try:
-        random_items = random.sample(rand_blog, 1)
+        random_items = random.sample(rand_blog, 8)
     except:
-        random_items = []
+        random_items = random.sample(rand_blog, BlogPost.objects.all().count())
         
     tags = [i for i in blg_inst.tags.all()]
     context = {

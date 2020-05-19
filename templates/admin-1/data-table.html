@@ -250,7 +250,7 @@
                 <tbody>
                   {% for blog in all_blogs %}
                     <tr>
-                        <td>{{blog.title}}</td>
+                        <td><a href="/blog/edit/{{blog.slug}}/">{{blog.title}}</a> </td>
                         <td>{{blog.author}}</td>
                         <td>{{blog.created}}</td>
                   {% endfor %}

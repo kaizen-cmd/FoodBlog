@@ -36,7 +36,7 @@
     }
 </style>
 <body>
-    <form action="{% url 'create-blog' %}" method="POST">
+    <form action="/blog/edit/{{slug}}/" method="POST">
         {% csrf_token %}
         <a href="/admin-1/all-posts"><h3>Back</h3></a>
         <h1>Create New Post</h1>
