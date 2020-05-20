@@ -33,7 +33,7 @@
             <li class="uk-parent">
               <a href="#">Dish Type</a>
               <ul class="uk-nav-sub">
-                {% for tag in tags %}
+                {% for tag in tags|slice:":6"%}
                 <li><a href="/{{tag.tag}}/1/">{{tag.tag}}</a></li>
                 {% endfor %}
               </ul>

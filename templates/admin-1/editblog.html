@@ -1,19 +1,46 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-  {% if user.is_authenticated %}
   <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Kode is a Premium Bootstrap Admin Template, It's responsive, clean coded and mobile friendly">
   <meta name="keywords" content="bootstrap, admin, dashboard, flat admin template, responsive," />
-  <title>Kode - Premium Bootstrap Admin Template</title>
+  <title>Konica Edit Blog</title>
+  <script src="https://cdn.tiny.cloud/1/ywpnkzaov1w9e799e3f5d9fanfbjbw7adhztywgwyoqk8xx1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
   <!-- ========== Css Files ========== -->
   <link href="{% static 'admin-1/css/root.css' %}" rel="stylesheet">
 
   </head>
+  <style>
+    select {
+        width: 200px;
+        height: 200px;
+    }
+
+    input {
+        width: 450px;
+        height: 30px;
+        font-size: 1.5rem;
+    }
+    textarea {
+        height: 500px;
+    }
+    button {
+        font-size: 1.2rem;
+        background-color: #0779e4;
+        color: white;
+        outline: none;
+        border: none;
+    }
+    button:hover {
+        cursor: pointer;
+    }
+</style>
+
   <body>
   <!-- Start Page Loading -->
   <div class="loading"><img src="{% static 'admin-1/img/loading.gif' %}" alt="loading-img"></div>
@@ -24,7 +51,7 @@
 
   	<!-- Start App Logo -->
   	<div class="applogo">
-  		<a href="index.html" class="logo">kode</a>
+  		<a href="/admin-1" class="logo">kode</a>
   	</div>
   	<!-- End App Logo -->
 
@@ -77,7 +104,7 @@
     </li>
 
     <li class="dropdown link">
-      <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><b>Hello, {{username}}</b><span class="caret"></span></a>
+      <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox">Hello, <b>{{username}}</b><span class="caret"></span></a>
         <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
           <li role="presentation" class="dropdown-header">Profile</li>
           <li><a href="#"><i class="fa falist fa-inbox"></i>Inbox<span class="badge label-danger">4</span></a></li>
@@ -85,7 +112,7 @@
           <li><a href="#"><i class="fa falist fa-wrench"></i>Settings</a></li>
           <li class="divider"></li>
           <li><a href="#"><i class="fa falist fa-lock"></i> Lockscreen</a></li>
-          <li><a href="/logout"><i class="fa falist fa-power-off"></i> Logout</a></li>
+          <li><a href="/logout/"><i class="fa falist fa-power-off"></i> Logout</a></li>
         </ul>
     </li>
 
@@ -96,8 +123,7 @@
   <!-- END TOP -->
  <!-- //////////////////////////////////////////////////////////////////////////// --> 
 
-
-<!-- //////////////////////////////////////////////////////////////////////////// --> 
+ <!-- //////////////////////////////////////////////////////////////////////////// --> 
 <!-- START SIDEBAR -->
 <div class="sidebar clearfix">
 
@@ -117,14 +143,12 @@
       <li><a href="others.html">Others<span class="label label-danger">NEW</span></a></li>
     </ul>
   </li>
-
   <li><a href="#"><span class="icon color7"><i class="fa fa-archive"></i></span>Blog<span class="caret"></span></a>
     <ul>
       <li><a href="/admin-1/all-posts">Posts</a></li>
       <li><a href="tabs.html">Categories</a></li>
     </ul>
   </li>
-
   <li><a href="charts.html"><span class="icon color8"><i class="fa fa-bar-chart"></i></span>Charts</a></li>
   <li><a href="#"><span class="icon color9"><i class="fa fa-th"></i></span>Tables<span class="caret"></span></a>
     <ul>
@@ -184,97 +208,67 @@
 
   <!-- Start Page Header -->
   <div class="page-header">
-    <h1 class="title">Data Tables</h1>
+    <h1 class="title"> Blog </h1>
       <ol class="breadcrumb">
-        <li><a href="/admin-1">Dashboard</a></li>
-        <li><a href="#">Tables</a></li>
-        <li class="active">Data Tables</li>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="#">Extra Pages</a></li>
+        <li class="active">Create Blog</li>
       </ol>
 
     <!-- Start Page Header Right Div -->
-    <div class="right">
-      <div class="btn-group" role="group" aria-label="...">
-        <a href="index.html" class="btn btn-light">Dashboard</a>
-        <a href="#" class="btn btn-light"><i class="fa fa-refresh"></i></a>
-        <a href="#" class="btn btn-light"><i class="fa fa-search"></i></a>
-        <a href="#" class="btn btn-light" id="topstats"><i class="fa fa-line-chart"></i></a>
-      </div>
-    </div>
+    <form action="/blog/edit/{{slug}}/" method="POST" target="_blank">
+        {% csrf_token %}
+        <a href="/admin-1/all-posts"><h3>Back</h3></a>
+        <h1>Edit {{title}}</h1>
+        <input type="text" name="title" placeholder="Title" value="{{title}}">
+        <div>
+            <br><br>
+            <input type="text" name="imgurl" placeholder="FeatureImage URL" value="{{imgurl}}"> 
+        </div>
+        <br><br>
+        <textarea name="body">{{body}}</textarea>
+        <br><br>
+        <input type="text" name="author" placeholder="Author" value="{{author}}">
+        <h3>Categories</h3>
+        <select multiple name="category">
+            {% for category in categories %}
+            <option value="{{category.id}}">{{category.category}}</option>
+            {% endfor %}
+        </select>
+        <a href="/admin/recipe/category/add/?_to_field=id&_popup=1" style="display: block;" target="_blank">Add Category</a>
+        <label for="" style="display: block; font-size: 1.2rem; color:grey">Hold down ctrl on windows and cmd on mac to select multiple</label>
+        <h3>Tags</h3>
+        <select multiple name="tag">
+            {% for tag in tags %}
+            <option value="{{tag.id}}">{{tag.tag}}</option>
+            {% endfor %}
+        </select>
+        <a href="/admin/recipe/tag/add/?_to_field=id&_popup=1" style="display: block;" target="_blank">Add Tag</a>
+        
+
+        <input type="text" id="changer" name="option" style="display: none;" value="">
+
+        <div>
+            <br><br>
+            <button onclick="preview()">Preview</button>
+            <button onclick="post()">Post</button>
+            <br><br><br>
+        </div>
+
+    </form>
+      
     <!-- End Page Header Right Div -->
 
   </div>
   <!-- End Page Header -->
 
-  <!-- Start Presentation -->
-  <div class="row presentation">
-
-    <div class="col-lg-8 col-md-6 titles">
-      <h1>Blog Posts</h1>
-    </div>
-
-    <div class="col-lg-4 col-md-6">
-      <br><br>
-      
-    </div>
-
-  </div>
-  <!-- End Presentation -->
-
-
  <!-- //////////////////////////////////////////////////////////////////////////// --> 
 <!-- START CONTAINER -->
-<div class="container-padding">
-
-  
-  <!-- Start Row -->
-  <div class="row">
-
-    <!-- Start Panel -->
-    <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-title">
-          All Posts
-        </div>
-        <div style="margin-left: 85%; display: inline;">
-          <a class="btn btn-default" href="/admin-1/create-blog" >Create New Post</a>
-        </div>
-          
-          <br><br>
-        <div class="panel-body table-responsive">
-            <table id="example0" class="table display">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-             
-             
-                <tbody>
-                  {% for blog in all_blogs %}
-                    <tr>
-                        <td><a href="/blog/edit/{{blog.slug}}/">{{blog.title}}</a> </td>
-                        <td>{{blog.author}}</td>
-                        <td>{{blog.created}}</td>
-                  {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
+<div class="container-default">
 
 
-        </div>
-
-      </div>
-    </div>
-    <!-- End Panel -->
-
-
-  </div>
-  <!-- End Row -->
-
-
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 
 
@@ -449,11 +443,25 @@
 <!-- //////////////////////////////////////////////////////////////////////////// --> 
 
 
-
 <!-- ================================================
 jQuery Library
 ================================================ -->
 <script src="{% static 'admin-1/js/jquery.min.js' %}"></script>
+<script>
+  tinymce.init({
+    selector: 'textarea',
+    plugins: 'media image',
+    toolbar: 'media image',
+    toolbar_mode: 'floating',
+  });
+
+  function preview() {
+      document.getElementById("changer").value = "preview";
+  }
+  function post() {
+      document.getElementById("changer").value = "post";
+  }
+</script>
 
 <!-- ================================================
 Bootstrap Core JavaScript File
@@ -466,62 +474,104 @@ Plugin.js - Some Specific JS codes for Plugin Settings
 <script src="{% static 'admin-1/js/plugins.js' %}"></script>
 
 <!-- ================================================
+Bootstrap Select
+================================================ -->
+<script src="{% static 'admin-1/js/bootstrap-select/bootstrap-select.js' %}"></script>
+
+<!-- ================================================
+Bootstrap Toggle
+================================================ -->
+<script src="{% static 'admin-1/js/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
+
+<!-- ================================================
+Bootstrap WYSIHTML5
+================================================ -->
+<!-- main file -->
+<script src="{% static 'admin-1/js/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js' %}"></script>
+<!-- bootstrap file -->
+<script src="{% static 'admin-1/js/bootstrap-wysihtml5/bootstrap-wysihtml5.js' %}"></script>
+
+<!-- ================================================
+Summernote
+================================================ -->
+<script src="{% static 'admin-1/js/summernote/summernote.min.js' %}"></script>
+
+<!-- ================================================
+Flot Chart
+================================================ -->
+<!-- main file -->
+<script src="{% static 'admin-1/js/flot-chart/flot-chart.js' %}"></script>
+<!-- time.js -->
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-time.js' %}"></script>
+<!-- stack.js -->
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-stack.js' %}"></script>
+<!-- pie.js -->
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-pie.js' %}"></script>
+<!-- demo codes -->
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-plugin.js' %}"></script>
+
+<!-- ================================================
+Chartist
+================================================ -->
+<!-- main file -->
+<script src="{% static 'admin-1/js/chartist/chartist.js' %}"></script>
+<!-- demo codes -->
+<script src="{% static 'admin-1/js/chartist/chartist-plugin.js' %}"></script>
+
+<!-- ================================================
+Easy Pie Chart
+================================================ -->
+<!-- main file -->
+<script src="{% static 'admin-1/js/easypiechart/easypiechart.js' %}"></script>
+<!-- demo codes -->
+<script src="{% static 'admin-1/js/easypiechart/easypiechart-plugin.js' %}"></script>
+
+<!-- ================================================
+Rickshaw
+================================================ -->
+<!-- d3 -->
+<script src="{% static 'admin-1/js/rickshaw/d3.v3.js' %}"></script>
+<!-- main file -->
+<script src="{% static 'admin-1/js/rickshaw/rickshaw.js' %}"></script>
+<!-- demo codes -->
+<script src="{% static 'admin-1/js/rickshaw/rickshaw-plugin.js' %}"></script>
+
+<!-- ================================================
 Data Tables
 ================================================ -->
 <script src="{% static 'admin-1/js/datatables/datatables.min.js' %}"></script>
 
+<!-- ================================================
+Sweet Alert
+================================================ -->
+<script src="{% static 'admin-1/js/sweet-alert/sweet-alert.min.js' %}"></script>
 
+<!-- ================================================
+Kode Alert
+================================================ -->
+<script src="{% static 'admin-1/js/kode-alert/main.js' %}"></script>
 
-<script>
-$(document).ready(function() {
-    $('#example0').DataTable();
-} );
-</script>
+<!-- ================================================
+jQuery UI
+================================================ -->
+<script src="{% static 'admin-1/js/jquery-ui/jquery-ui.min.js' %}"></script>
 
+<!-- ================================================
+Moment.js
+================================================ -->
+<script src="{% static 'admin-1/js/moment/moment.min.js' %}"></script>
 
+<!-- ================================================
+Full Calendar
+================================================ -->
+<script src="{% static 'admin-1/js/full-calendar/fullcalendar.js' %}"></script>
 
-<script>
-$(document).ready(function() {
-    var table = $('#example').DataTable({
-        "columnDefs": [
-            { "visible": false, "targets": 2 }
-        ],
-        "order": [[ 2, 'asc' ]],
-        "displayLength": 25,
-        "drawCallback": function ( settings ) {
-            var api = this.api();
-            var rows = api.rows( {page:'current'} ).nodes();
-            var last=null;
- 
-            api.column(2, {page:'current'} ).data().each( function ( group, i ) {
-                if ( last !== group ) {
-                    $(rows).eq( i ).before(
-                        '<tr class="group"><td colspan="5">'+group+'</td></tr>'
-                    );
- 
-                    last = group;
-                }
-            } );
-        }
-    } );
- 
-    // Order by the grouping
-    $('#example tbody').on( 'click', 'tr.group', function () {
-        var currentOrder = table.order()[0];
-        if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
-            table.order( [ 2, 'desc' ] ).draw();
-        }
-        else {
-            table.order( [ 2, 'asc' ] ).draw();
-        }
-    } );
-} );
-</script>
+<!-- ================================================
+Bootstrap Date Range Picker
+================================================ -->
+<script src="{% static 'admin-1/js/date-range-picker/daterangepicker.js' %}"></script>
+
 
 
 </body>
-
-{% else %}
-<h1>Log In as an admin First</h1>
-{% endif %}
 </html>

@@ -8,6 +8,36 @@
 {{recipe.title | safe}}
 {% endblock meta_title %}
 
+{% block smeta %}
+
+<meta property="og:title" content="{{recipe.title}}" />
+
+<meta property="og:url" content="/dish/{{recipe.slug}}/" />
+
+<meta property="og:description" content="{{recipe.descreption | striptags | safe}}" />
+
+<meta property="og:image" content="{{recipe.img_url}}" />
+
+<meta property="og:type" content="article" />
+
+<meta name="twitter:card" content="summary_large_image" />
+
+<meta name="twitter:title" content="{{recipe.title}}" />
+
+<meta name="twitter:url" content="/dish/{{recipe.slug}}/" />
+
+<meta name="twitter:description" content="{{recipe.descreption | striptags | safe}}" />
+
+<meta name="twitter:image" content="{{recipe.img_url}}" />
+
+<meta itemprop="name" content="{{recipe.title}}" />
+
+<meta itemprop="description" content="{{recipe.descreption | striptags | safe}}" />
+
+<meta itemprop="image" content="{{recipe.img_url}}">
+
+{% endblock smeta %}
+
 {% block meta_kw %}
 {% for tag in recipe.tags.all %}
 {{tag}},
@@ -141,7 +171,7 @@
             <a href="#" class="uk-icon-link uk-margin-left" data-uk-icon="icon: cart; ratio: 1.2" 
              data-uk-tooltip="title: Shopping List"></a>
 
-            <form action="{% url 'pdfgen' %}" method="POST">
+            <form action="{% url 'pdfgen' %}" method="POST" target="_blank">
               {% csrf_token %}
               <input type="text" name="title" value="{{recipe.title}}" style="display: none;">
               <button style="background-color: transparent; outline: none; border: none;"><a href="#" class="uk-icon-link uk-margin-left" data-uk-icon="icon: print; ratio: 1.2" 

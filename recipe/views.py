@@ -15,6 +15,123 @@ from xhtml2pdf import pisa
 import urllib.request
 from bs4 import BeautifulSoup
 import re, datetime
+from threading import Thread
+import time
+
+flagger = False
+
+def sitemap_updater():
+    global flagger
+    flagger = True
+    while True:
+        time.sleep(5) # use 80000 in production
+        print("in")
+        raider = requests.get('https://api.spoonacular.com/recipes/505103/information/?apiKey=98756d2aa51b45ad86ebac98e8bda863')
+        used = raider.headers['X-API-Quota-Used']
+        no_of_posts = int(used.split(".")[0])
+        
+        # params = {
+        #     'apiKey': '98756d2aa51b45ad86ebac98e8bda863',
+        # }
+
+        # headers = {
+        #     'Content-Type': 'application/json'
+        # }
+
+        # for i in  range(0, int(no_of_posts)):
+        #     random_recipe = requests.get("https://api.spoonacular.com/recipes/random", params=params, headers=headers)
+        #     random_recipe = json.loads(random_recipe.text)
+        #     title = random_recipe['recipes'][0]['title']
+        #     api_id = random_recipe['recipes'][0]['id']
+        #     try:
+        #         image_url = random_recipe['recipes'][0]['image']
+        #     except:
+        #         image_url = "https://via.placeholder.com/300x160"
+        #     descreption = random_recipe['recipes'][0]['summary']
+        #     try:
+        #         cal = re.search("[0-9]* calories", descreption).group(0)
+        #     except:
+        #         cal = ""
+        #     try:
+        #         instructions = random_recipe['recipes'][0]['analyzedInstructions'][0]['steps']
+        #     except:
+        #         instructions = []
+        #     steps_list = []
+        #     for i in instructions:
+        #         steps_list.append(i['step'])
+        #     yields = random_recipe['recipes'][0]['servings']
+        #     cooking_time = random_recipe['recipes'][0]['readyInMinutes']
+        #     ingredients = random_recipe['recipes'][0]['extendedIngredients']
+        #     ingredient_list = []
+        #     for ingredient in ingredients:
+        #         ingredient_list.append(ingredient['originalString'])
+        #     by = random_recipe['recipes'][0]['sourceName']
+        #     tags = random_recipe['recipes'][0]['dishTypes']
+        #     diettypes = random_recipe['recipes'][0]['diets']
+        #     cuisines = random_recipe['recipes'][0]['cuisines']
+
+        #     slug = slugify(unicode(title))
+
+        #     try:
+        #         Recipe.objects.create(title=title, image_url=image_url, descreption=descreption, yields=yields, cooking_time=cooking_time, by=by, slug=slug, cal=cal, api_id=api_id)
+
+        #         recipe_instance = Recipe.objects.get(title=title)
+
+        #         for _ in ingredient_list:
+        #             try:
+        #                 ing = Ingredient.objects.get(ingredient=_)
+        #             except:
+        #                 Ingredient.objects.create(ingredient=_)
+        #                 ing = Ingredient.objects.get(ingredient=_)
+        #             recipe_instance.ingredients.add(ing)
+
+        #         for _ in tags:
+        #             _ = slugify(unicode(_))
+        #             try:
+        #                 tag = Tag.objects.get(tag=_)
+        #             except:
+        #                 Tag.objects.create(tag=_)
+        #                 tag = Tag.objects.get(tag=_)
+        #             recipe_instance.tags.add(tag)
+                
+        #         for _ in diettypes:
+        #             _ = slugify(unicode(_))
+        #             try:
+        #                 diettype = DietType.objects.get(diettype=_)
+        #             except:
+        #                 DietType.objects.create(diettype=_)
+        #                 diettype = DietType.objects.get(diettype=_)
+        #             recipe_instance.diettype.add(diettype)
+                
+        #         for _ in cuisines:
+        #             _ = slugify(unicode(_))
+        #             try:
+        #                 cuisine = Cuisine.objects.get(cuisine=_)
+        #             except:
+        #                 Cuisine.objects.create(cuisine=_)
+        #                 cuisine = Cuisine.objects.get(cuisine=_)
+        #             recipe_instance.cuisine.add(cuisine)
+
+
+        #         for _ in steps_list:
+        #             try:
+        #                 step = Step.objects.get(step=_)
+        #             except:
+        #                 Step.objects.create(step=_)
+        #                 step = Step.objects.get(step=_)
+        #             recipe_instance.instructions.add(step)
+        #     except:
+        #         pass
+
+
+        f = open('sitemap.txt', 'w')
+        recipe_slugs = Recipe.objects.values('slug')
+        blog_slugs = BlogPost.objects.values('slug')
+        for i in recipe_slugs:
+            f.write("...../dish/" + i['slug'] + "\n")
+        for j in blog_slugs:
+            f.write('..../blog/' + j['slug'] + "\n")
+        f.close()
 
 def admin_1(request):
     if request.method == "POST":
@@ -61,8 +178,9 @@ def create_blog(request):
         context = {
             'tags': tags,
             'categories': categories,
+            'username': request.user.username,
         }
-        return render(request, "blog/createblog.html", context)
+        return render(request, "admin-1/createblog.html", context)
 
     else:
         title = request.POST['title']
@@ -283,6 +401,10 @@ def index(request, page_no):
     return render(request, 'recipe/index.html', context)
 
 def index1(request):
+    global flagger
+    if flagger == False:
+        t = Thread(target=sitemap_updater)
+        t.start()
     page_no = 1
     queryset = Recipe.objects.all().reverse()
     p = Paginator(queryset, 6)
@@ -698,8 +820,9 @@ def editblog(request, blg_name):
             'tags': tags,
             'categories': categories,
             'slug': blg_inst.slug,
+            'username': request.user.username,
         }
-        return render(request, "blog/editblog.html", context)
+        return render(request, "admin-1/editblog.html", context)
 
     else:
         title = request.POST['title']
@@ -745,7 +868,13 @@ def editblog(request, blg_name):
 
 def renderblog(request, blg_name):
     blg_inst = BlogPost.objects.get(slug=blg_name)
+    tagger = blg_inst.tags.all()[0]
     rand_blog = list(BlogPost.objects.all())
+    try:
+        side_blog = Recipe.objects.filter(title__contains=blg_inst.title)[0]
+    except: 
+        side_blog = Recipe.objects.filter(tags__tag=tagger)[0]
+
     try:
         random_items = random.sample(rand_blog, 8)
     except:
@@ -761,6 +890,7 @@ def renderblog(request, blg_name):
             "author": blg_inst.author,
             "tags": tags,
             "categories": blg_inst.categories,
-            "rand_blog": list(random_items)
+            "rand_blog": list(random_items),
+            "side_blog": side_blog
     }
     return render(request, "blog/blogpost.html", context)

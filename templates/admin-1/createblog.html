@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,15 +8,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Kode is a Premium Bootstrap Admin Template, It's responsive, clean coded and mobile friendly">
   <meta name="keywords" content="bootstrap, admin, dashboard, flat admin template, responsive," />
-  <title>Kode - Premium Bootstrap Admin Template</title>
+  <title>Konica Create Blog</title>
+  <script src="https://cdn.tiny.cloud/1/ywpnkzaov1w9e799e3f5d9fanfbjbw7adhztywgwyoqk8xx1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
   <!-- ========== Css Files ========== -->
-  <link href="css/root.css" rel="stylesheet">
+  <link href="{% static 'admin-1/css/root.css' %}" rel="stylesheet">
 
   </head>
+  <style>
+    select {
+        width: 200px;
+        height: 200px;
+    }
+
+    input {
+        width: 450px;
+        height: 30px;
+        font-size: 1.5rem;
+    }
+    textarea {
+        height: 500px;
+    }
+    button {
+        font-size: 1.2rem;
+        background-color: #0779e4;
+        color: white;
+        outline: none;
+        border: none;
+    }
+    button:hover {
+        cursor: pointer;
+    }
+</style>
   <body>
   <!-- Start Page Loading -->
-  <div class="loading"><img src="img/loading.gif" alt="loading-img"></div>
+  <div class="loading"><img src="{% static 'admin-1/img/loading.gif' %}" alt="loading-img"></div>
   <!-- End Page Loading -->
  <!-- //////////////////////////////////////////////////////////////////////////// --> 
   <!-- START TOP -->
@@ -75,7 +103,7 @@
     </li>
 
     <li class="dropdown link">
-      <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="img/profileimg.png" alt="img"><b>Jonathan Doe</b><span class="caret"></span></a>
+      <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox">Hello, <b>{{username}}</b><span class="caret"></span></a>
         <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
           <li role="presentation" class="dropdown-header">Profile</li>
           <li><a href="#"><i class="fa falist fa-inbox"></i>Inbox<span class="badge label-danger">4</span></a></li>
@@ -83,7 +111,7 @@
           <li><a href="#"><i class="fa falist fa-wrench"></i>Settings</a></li>
           <li class="divider"></li>
           <li><a href="#"><i class="fa falist fa-lock"></i> Lockscreen</a></li>
-          <li><a href="#"><i class="fa falist fa-power-off"></i> Logout</a></li>
+          <li><a href="/logout/"><i class="fa falist fa-power-off"></i> Logout</a></li>
         </ul>
     </li>
 
@@ -100,7 +128,7 @@
 
 <ul class="sidebar-panel nav">
   <li class="sidetitle">MAIN</li>
-  <li><a href="index.html"><span class="icon color5"><i class="fa fa-home"></i></span>Dashboard<span class="label label-default">2</span></a></li>
+  <li><a href="/admin-1/"><span class="icon color5"><i class="fa fa-home"></i></span>Dashboard<span class="label label-default">2</span></a></li>
   <li><a href="mailbox.html"><span class="icon color6"><i class="fa fa-envelope-o"></i></span>Mailbox<span class="label label-default">19</span></a></li>
   <li><a href="#"><span class="icon color7"><i class="fa fa-flask"></i></span>UI Elements<span class="caret"></span></a>
     <ul>
@@ -112,6 +140,12 @@
       <li><a href="modal-boxes.html">Modal Boxes</a></li>
       <li><a href="progress-bars.html">Progress Bars</a></li>
       <li><a href="others.html">Others<span class="label label-danger">NEW</span></a></li>
+    </ul>
+  </li>
+  <li><a href="#"><span class="icon color7"><i class="fa fa-archive"></i></span>Blog<span class="caret"></span></a>
+    <ul>
+      <li><a href="/admin-1/all-posts">Posts</a></li>
+      <li><a href="tabs.html">Categories</a></li>
     </ul>
   </li>
   <li><a href="charts.html"><span class="icon color8"><i class="fa fa-bar-chart"></i></span>Charts</a></li>
@@ -173,22 +207,55 @@
 
   <!-- Start Page Header -->
   <div class="page-header">
-    <h1 class="title">Blank Page</h1>
+    <h1 class="title">New Blog </h1>
       <ol class="breadcrumb">
-        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="/admin-1">Dashboard</a></li>
         <li><a href="#">Extra Pages</a></li>
-        <li class="active">Blank Page</li>
+        <li class="active">Create Blog</li>
       </ol>
 
     <!-- Start Page Header Right Div -->
-    <div class="right">
-      <div class="btn-group" role="group" aria-label="...">
-        <a href="index.html" class="btn btn-light">Dashboard</a>
-        <a href="#" class="btn btn-light"><i class="fa fa-refresh"></i></a>
-        <a href="#" class="btn btn-light"><i class="fa fa-search"></i></a>
-        <a href="#" class="btn btn-light" id="topstats"><i class="fa fa-line-chart"></i></a>
+    <form action="{% url 'create-blog' %}" method="POST" target="_blank">
+      {% csrf_token %}
+      <a href="/admin-1/all-posts"><h3>Back</h3></a>
+      <h1>Create New Post</h1>
+      <input type="text" name="title" placeholder="Title" value="{{title}}">
+      <div>
+          <br><br>
+          <input type="text" name="imgurl" placeholder="FeatureImage URL" value="{{imgurl}}"> 
       </div>
-    </div>
+      <br><br>
+      <textarea name="body">{{body}}</textarea>
+      <br><br>
+      <input type="text" name="author" placeholder="Author" value="{{author}}">
+      <h3>Categories</h3>
+      <select multiple name="category">
+          {% for category in categories %}
+          <option value="{{category.id}}">{{category.category}}</option>
+          {% endfor %}
+      </select>
+      <a href="/admin/recipe/category/add/?_to_field=id&_popup=1" style="display: block;" target="_blank">Add Category</a>
+      <br><br>
+      <label for="" style="display: block; font-size: 1.2rem; color:grey">Hold down ctrl on windows and cmd on mac to select multiple</label>
+      <h3>Tags</h3>
+      <select multiple name="tag">
+          {% for tag in tags %}
+          <option value="{{tag.id}}">{{tag.tag}}</option>
+          {% endfor %}
+      </select>
+      <a href="/admin/recipe/tag/add/?_to_field=id&_popup=1" style="display: block;" target="_blank">Add Tag</a>
+
+      <input type="text" id="changer" name="option" style="display: none;" value="">
+
+      <div>
+          <br><br>
+          <button onclick="preview()">Preview</button>
+          <button onclick="post()">Post</button>
+          <br><br><br>
+      </div>
+
+  </form>
+      
     <!-- End Page Header Right Div -->
 
   </div>
@@ -378,115 +445,130 @@
 <!-- ================================================
 jQuery Library
 ================================================ -->
-<script src="js/jquery.min.js"></script>
+<script src="{% static 'admin-1/js/jquery.min.js' %}"></script>
+<script>
+  tinymce.init({
+    selector: 'textarea',
+    plugins: 'media image',
+    toolbar: 'media image',
+    toolbar_mode: 'floating',
+  });
+
+  function preview() {
+      document.getElementById("changer").value = "preview";
+  }
+  function post() {
+      document.getElementById("changer").value = "post";
+  }
+</script>
 
 <!-- ================================================
 Bootstrap Core JavaScript File
 ================================================ -->
-<script src="js/bootstrap/bootstrap.min.js"></script>
+<script src="{% static 'admin-1/js/bootstrap/bootstrap.min.js' %}"></script>
 
 <!-- ================================================
 Plugin.js - Some Specific JS codes for Plugin Settings
 ================================================ -->
-<script src="js/plugins.js"></script>
+<script src="{% static 'admin-1/js/plugins.js' %}"></script>
 
 <!-- ================================================
 Bootstrap Select
 ================================================ -->
-<script src="js/bootstrap-select/bootstrap-select.js"></script>
+<script src="{% static 'admin-1/js/bootstrap-select/bootstrap-select.js' %}"></script>
 
 <!-- ================================================
 Bootstrap Toggle
 ================================================ -->
-<script src="js/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+<script src="{% static 'admin-1/js/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
 
 <!-- ================================================
 Bootstrap WYSIHTML5
 ================================================ -->
 <!-- main file -->
-<script src="js/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js"></script>
+<script src="{% static 'admin-1/js/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js' %}"></script>
 <!-- bootstrap file -->
-<script src="js/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script src="{% static 'admin-1/js/bootstrap-wysihtml5/bootstrap-wysihtml5.js' %}"></script>
 
 <!-- ================================================
 Summernote
 ================================================ -->
-<script src="js/summernote/summernote.min.js"></script>
+<script src="{% static 'admin-1/js/summernote/summernote.min.js' %}"></script>
 
 <!-- ================================================
 Flot Chart
 ================================================ -->
 <!-- main file -->
-<script src="js/flot-chart/flot-chart.js"></script>
+<script src="{% static 'admin-1/js/flot-chart/flot-chart.js' %}"></script>
 <!-- time.js -->
-<script src="js/flot-chart/flot-chart-time.js"></script>
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-time.js' %}"></script>
 <!-- stack.js -->
-<script src="js/flot-chart/flot-chart-stack.js"></script>
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-stack.js' %}"></script>
 <!-- pie.js -->
-<script src="js/flot-chart/flot-chart-pie.js"></script>
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-pie.js' %}"></script>
 <!-- demo codes -->
-<script src="js/flot-chart/flot-chart-plugin.js"></script>
+<script src="{% static 'admin-1/js/flot-chart/flot-chart-plugin.js' %}"></script>
 
 <!-- ================================================
 Chartist
 ================================================ -->
 <!-- main file -->
-<script src="js/chartist/chartist.js"></script>
+<script src="{% static 'admin-1/js/chartist/chartist.js' %}"></script>
 <!-- demo codes -->
-<script src="js/chartist/chartist-plugin.js"></script>
+<script src="{% static 'admin-1/js/chartist/chartist-plugin.js' %}"></script>
 
 <!-- ================================================
 Easy Pie Chart
 ================================================ -->
 <!-- main file -->
-<script src="js/easypiechart/easypiechart.js"></script>
+<script src="{% static 'admin-1/js/easypiechart/easypiechart.js' %}"></script>
 <!-- demo codes -->
-<script src="js/easypiechart/easypiechart-plugin.js"></script>
+<script src="{% static 'admin-1/js/easypiechart/easypiechart-plugin.js' %}"></script>
 
 <!-- ================================================
 Rickshaw
 ================================================ -->
 <!-- d3 -->
-<script src="js/rickshaw/d3.v3.js"></script>
+<script src="{% static 'admin-1/js/rickshaw/d3.v3.js' %}"></script>
 <!-- main file -->
-<script src="js/rickshaw/rickshaw.js"></script>
+<script src="{% static 'admin-1/js/rickshaw/rickshaw.js' %}"></script>
 <!-- demo codes -->
-<script src="js/rickshaw/rickshaw-plugin.js"></script>
+<script src="{% static 'admin-1/js/rickshaw/rickshaw-plugin.js' %}"></script>
 
 <!-- ================================================
 Data Tables
 ================================================ -->
-<script src="js/datatables/datatables.min.js"></script>
+<script src="{% static 'admin-1/js/datatables/datatables.min.js' %}"></script>
 
 <!-- ================================================
 Sweet Alert
 ================================================ -->
-<script src="js/sweet-alert/sweet-alert.min.js"></script>
+<script src="{% static 'admin-1/js/sweet-alert/sweet-alert.min.js' %}"></script>
 
 <!-- ================================================
 Kode Alert
 ================================================ -->
-<script src="js/kode-alert/main.js"></script>
+<script src="{% static 'admin-1/js/kode-alert/main.js' %}"></script>
 
 <!-- ================================================
 jQuery UI
 ================================================ -->
-<script src="js/jquery-ui/jquery-ui.min.js"></script>
+<script src="{% static 'admin-1/js/jquery-ui/jquery-ui.min.js' %}"></script>
 
 <!-- ================================================
 Moment.js
 ================================================ -->
-<script src="js/moment/moment.min.js"></script>
+<script src="{% static 'admin-1/js/moment/moment.min.js' %}"></script>
 
 <!-- ================================================
 Full Calendar
 ================================================ -->
-<script src="js/full-calendar/fullcalendar.js"></script>
+<script src="{% static 'admin-1/js/full-calendar/fullcalendar.js' %}"></script>
 
 <!-- ================================================
 Bootstrap Date Range Picker
 ================================================ -->
-<script src="js/date-range-picker/daterangepicker.js"></script>
+<script src="{% static 'admin-1/js/date-range-picker/daterangepicker.js' %}"></script>
 
 
 

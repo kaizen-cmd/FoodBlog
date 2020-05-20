@@ -9,12 +9,12 @@
   <title>Kode - Premium Bootstrap Admin Template</title>
 
   <!-- ========== Css Files ========== -->
-  <link href="css/root.css" rel="stylesheet">
+  <link href="{% static 'css/root.css' %}" rel="stylesheet">
 
   </head>
   <body>
   <!-- Start Page Loading -->
-  <div class="loading"><img src="img/loading.gif" alt="loading-img"></div>
+  <div class="loading"><img src="{% static 'img/loading.gif' %}" alt="loading-img"></div>
   <!-- End Page Loading -->
  <!-- //////////////////////////////////////////////////////////////////////////// --> 
   <!-- START TOP -->
@@ -462,30 +462,30 @@
 <!-- ================================================
 jQuery Library
 ================================================ -->
-<script src="js/jquery.min.js"></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
 
 <!-- ================================================
 Bootstrap Core JavaScript File
 ================================================ -->
-<script src="js/bootstrap/bootstrap.min.js"></script>
+<script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
 
 <!-- ================================================
 Plugin.js - Some Specific JS codes for Plugin Settings
 ================================================ -->
-<script src="js/plugins.js"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
 
 <!-- ================================================
 Bootstrap WYSIHTML5
 ================================================ -->
 <!-- main file -->
-<script src="js/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js"></script>
+<script src="{% static 'js/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js' %}"></script>
 <!-- bootstrap file -->
-<script src="js/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script src="{% static 'js/bootstrap-wysihtml5/bootstrap-wysihtml5.js' %}"></script>
 
 <!-- ================================================
 Summernote
 ================================================ -->
-<script src="js/summernote/summernote.min.js"></script>
+<script src="{% static 'js/summernote/summernote.min.js' %}"></script>
 
 <script>
   /* BOOTSTRAP WYSIHTML5 */
