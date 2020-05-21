@@ -701,155 +701,165 @@ def filter_cuisine(request, cuisine):
     return render(request, 'recipe/index.html', context)
 
 def search(request):
-    flag = False
-    query = request.POST['query']
+    if request.method == "POST":
+        flag = False
+        query = request.POST['query']
 
-    if Recipe.objects.filter(title__contains=query):
-        flag = True
-        query_list = Recipe.objects.filter(title__contains=query) 
-    
-    if flag == False:
+        if Recipe.objects.filter(title__contains=query):
+            flag = True
+            query_list = Recipe.objects.filter(title__contains=query) 
+        
+        if flag == False:
 
-        params = {
-            'apiKey': '98756d2aa51b45ad86ebac98e8bda863',
-            'query': query,
-            'number': '12',
-        }
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        recipe_obj_list = requests.get("https://api.spoonacular.com/recipes/complexSearch", params=params, headers=headers)
-        recipe_obj_list = json.loads(recipe_obj_list.text)
-        recipe_list = recipe_obj_list['results']
-        recipe_id_list = []
-        for recipe_id in recipe_list:
-            recipe_id_list.append(recipe_id['id'])
+            params = {
+                'apiKey': '98756d2aa51b45ad86ebac98e8bda863',
+                'query': query,
+                'number': '12',
+            }
+            headers = {
+                'Content-Type': 'application/json'
+            }
+            recipe_obj_list = requests.get("https://api.spoonacular.com/recipes/complexSearch", params=params, headers=headers)
+            recipe_obj_list = json.loads(recipe_obj_list.text)
+            recipe_list = recipe_obj_list['results']
+            recipe_id_list = []
+            for recipe_id in recipe_list:
+                recipe_id_list.append(recipe_id['id'])
 
-        query_list = []
+            query_list = []
 
-        params = {
-            'apiKey': '98756d2aa51b45ad86ebac98e8bda863',
-        }
+            params = {
+                'apiKey': '98756d2aa51b45ad86ebac98e8bda863',
+            }
 
-        for rec_id in recipe_id_list:
-            random_recipe = json.loads(requests.get("https://api.spoonacular.com/recipes/{}/information".format(rec_id), params=params, headers=headers).text)
-            api_id = random_recipe['id']
-            try:
-                title = random_recipe['title']
-            except:
-                title = "API Failed"
-            
-            try:
-                image_url = random_recipe['image']
-            except:
-                image_url = "https://via.placeholder.com/300x190"
-            
-            try:
-                descreption = random_recipe['summary']
-            except:
-                descreption = ""
-            try:
-                cal = re.search("[0-9]* calories", descreption).group(0)
-            except:
-                cal = ""
-            try:
-                instructions = random_recipe['analyzedInstructions'][0]['steps']
-            except:
-                instructions = []
-            steps_list = []
-            for i in instructions:
-                steps_list.append(i['step'])
-            yields = random_recipe['servings']
-            cooking_time = random_recipe['readyInMinutes']
-            ingredients = random_recipe['extendedIngredients']
-            ingredient_list = []
-            for ingredient in ingredients:
-                ingredient_list.append(ingredient['originalString'])
-            by = random_recipe['sourceName']
-            tags = random_recipe['dishTypes']
-            diettypes = random_recipe['diets']
-            cuisines = random_recipe['cuisines']
-
-            slug = slugify(unicode(title))
-
-            if Recipe.objects.filter(title=title).exists():
-                r = Recipe.objects.get(title=title)
-                query_list.append(r)
-            
-            else:
+            for rec_id in recipe_id_list:
+                random_recipe = json.loads(requests.get("https://api.spoonacular.com/recipes/{}/information".format(rec_id), params=params, headers=headers).text)
+                api_id = random_recipe['id']
                 try:
-                    Recipe.objects.create(title=title, image_url=image_url, descreption=descreption, yields=yields, cooking_time=cooking_time, by=by, slug=slug, cal=cal, api_id=api_id)
-                    recipe_instance = Recipe.objects.get(title=title)
+                    title = random_recipe['title']
+                except:
+                    title = "API Failed"
+                
+                try:
+                    image_url = random_recipe['image']
+                except:
+                    image_url = "https://via.placeholder.com/300x190"
+                
+                try:
+                    descreption = random_recipe['summary']
+                except:
+                    descreption = ""
+                try:
+                    cal = re.search("[0-9]* calories", descreption).group(0)
+                except:
+                    cal = ""
+                try:
+                    instructions = random_recipe['analyzedInstructions'][0]['steps']
+                except:
+                    instructions = []
+                steps_list = []
+                for i in instructions:
+                    steps_list.append(i['step'])
+                yields = random_recipe['servings']
+                cooking_time = random_recipe['readyInMinutes']
+                ingredients = random_recipe['extendedIngredients']
+                ingredient_list = []
+                for ingredient in ingredients:
+                    ingredient_list.append(ingredient['originalString'])
+                by = random_recipe['sourceName']
+                tags = random_recipe['dishTypes']
+                diettypes = random_recipe['diets']
+                cuisines = random_recipe['cuisines']
 
-                    for _ in ingredient_list:
-                        try:
-                            ing = Ingredient.objects.get(ingredient=_)
-                        except:
-                            Ingredient.objects.create(ingredient=_)
-                            ing = Ingredient.objects.get(ingredient=_)
-                        recipe_instance.ingredients.add(ing)
+                slug = slugify(unicode(title))
 
-                    for _ in tags:
-                        _ = slugify(unicode(_))
-                        try:
-                            tag = Tag.objects.get(tag=_)
-                        except:
-                            Tag.objects.create(tag=_)
-                            tag = Tag.objects.get(tag=_)
-                        recipe_instance.tags.add(tag)
-
-                    for _ in diettypes:
-                        _ = slugify(unicode(_))
-                        try:
-                            diettype = DietType.objects.get(diettype=_)
-                        except:
-                            DietType.objects.create(diettype=_)
-                            diettype = DietType.objects.get(diettype=_)
-                        recipe_instance.diettype.add(diettype)
-                    
-                    for _ in cuisines:
-                        _ = slugify(unicode(_))
-                        try:
-                            cuisine = Cuisine.objects.get(cuisine=_)
-                        except:
-                            Cuisine.objects.create(cuisine=_)
-                            cuisine = Cuisine.objects.get(cuisine=_)
-                        recipe_instance.cuisine.add(cuisine)
-
-                    for _ in steps_list:
-                        try:
-                            step = Step.objects.get(step=_)
-                        except:
-                            Step.objects.create(step=_)
-                            step = Step.objects.get(step=_)
-                        recipe_instance.instructions.add(step)
+                if Recipe.objects.filter(title=title).exists():
                     r = Recipe.objects.get(title=title)
                     query_list.append(r)
-                except:
-                    pass
-    rand_blog = list(BlogPost.objects.filter(show=True))
-    try:
+                
+                else:
+                    try:
+                        Recipe.objects.create(title=title, image_url=image_url, descreption=descreption, yields=yields, cooking_time=cooking_time, by=by, slug=slug, cal=cal, api_id=api_id)
+                        recipe_instance = Recipe.objects.get(title=title)
+
+                        for _ in ingredient_list:
+                            try:
+                                ing = Ingredient.objects.get(ingredient=_)
+                            except:
+                                Ingredient.objects.create(ingredient=_)
+                                ing = Ingredient.objects.get(ingredient=_)
+                            recipe_instance.ingredients.add(ing)
+
+                        for _ in tags:
+                            _ = slugify(unicode(_))
+                            try:
+                                tag = Tag.objects.get(tag=_)
+                            except:
+                                Tag.objects.create(tag=_)
+                                tag = Tag.objects.get(tag=_)
+                            recipe_instance.tags.add(tag)
+
+                        for _ in diettypes:
+                            _ = slugify(unicode(_))
+                            try:
+                                diettype = DietType.objects.get(diettype=_)
+                            except:
+                                DietType.objects.create(diettype=_)
+                                diettype = DietType.objects.get(diettype=_)
+                            recipe_instance.diettype.add(diettype)
+                        
+                        for _ in cuisines:
+                            _ = slugify(unicode(_))
+                            try:
+                                cuisine = Cuisine.objects.get(cuisine=_)
+                            except:
+                                Cuisine.objects.create(cuisine=_)
+                                cuisine = Cuisine.objects.get(cuisine=_)
+                            recipe_instance.cuisine.add(cuisine)
+
+                        for _ in steps_list:
+                            try:
+                                step = Step.objects.get(step=_)
+                            except:
+                                Step.objects.create(step=_)
+                                step = Step.objects.get(step=_)
+                            recipe_instance.instructions.add(step)
+                        r = Recipe.objects.get(title=title)
+                        query_list.append(r)
+                    except:
+                        pass
+        rand_blog = list(BlogPost.objects.filter(show=True))
         try:
-            random_items = random.sample(rand_blog, 4)
+            try:
+                random_items = random.sample(rand_blog, 4)
+            except:
+                random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
         except:
-            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
-    except:
-        random_items = []
+            random_items = []
 
-    queryset = query_list
-    tags_qset = Tag.objects.all()
-    cuisine = Cuisine.objects.all()
-    diettypes = DietType.objects.all()
+        queryset = query_list
+        tags_qset = Tag.objects.all()
+        cuisine = Cuisine.objects.all()
+        diettypes = DietType.objects.all()
+        context = {
+            'all_recipes': queryset,
+            'tags': tags_qset,
+            'cuisine': cuisine,
+            'dietypes': diettypes,
+            'var_title': '{}'.format(query + " recipes"),
+            'rand_blog': list(random_items)
+        }
+
+        return render(request, 'recipe/index.html', context)
+    else:
+        return redirect('/blog/')
+
+def show_all(request):
     context = {
-        'all_recipes': queryset,
-        'tags': tags_qset,
-        'cuisine': cuisine,
-        'dietypes': diettypes,
-        'var_title': '{}'.format(query + " recipes"),
-        'rand_blog': list(random_items)
+        'all_post': BlogPost.objects.filter(show=True).order_by('-id')
     }
-
-    return render(request, 'recipe/index.html', context)
+    print(context, "*")
+    return render(request, "recipe/search.html", context)
 
 def tag_search(request, tag, page_no):
     queryset = Recipe.objects.filter(tags__tag=slugify(unicode(tag)))
