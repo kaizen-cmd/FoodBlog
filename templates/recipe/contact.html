@@ -15,9 +15,11 @@
           <a href="#" class="uk-button uk-button-primary uk-margin-top">Schedule a call</a>
         </div>
       </div>
+      
       <div class="uk-width-1-2@m">
         <div class="uk-background-primary uk-border-rounded-large uk-light uk-padding uk-margin-top">
-          <form class="uk-form-stacked">
+          <form class="uk-form-stacked" action="{% url 'contact' %}" method="POST">
+            {% csrf_token %}
             <div class="uk-margin-bottom">
               <label class="uk-form-label" for="name">Name</label>
               <div class="uk-form-controls">
@@ -27,7 +29,7 @@
             <div class="uk-margin-bottom">
               <label class="uk-form-label" for="_replyto">Email</label>
               <div class="uk-form-controls">
-                <input id="_replyto" class="uk-input uk-border-pill" name="_replyto" type="email" required>
+                <input id="_replyto" class="uk-input uk-border-pill" name="email" type="email" required>
               </div>
             </div>
             <div class="uk-margin-bottom">
@@ -40,6 +42,7 @@
               <input class="uk-button uk-button-warning uk-border-pill" type="submit" value="Send Message">
             </div>
           </form>
+          <h3>{{message}}</h3>
         </div>
       </div>
     </div>      

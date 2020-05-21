@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
   <meta name="description" content="Kode is a Premium Bootstrap Admin Template, It's responsive, clean coded and mobile friendly">
   <meta name="keywords" content="bootstrap, admin, dashboard, flat admin template, responsive," />
   <title>Konica Create Blog</title>
@@ -228,6 +229,8 @@
       <textarea name="body">{{body}}</textarea>
       <br><br>
       <input type="text" name="author" placeholder="Author" value="{{author}}">
+      <br><br>
+      <input type="text" name="recipe_sider" placeholder="Add a recipe">
       <h3>Categories</h3>
       <select multiple name="category">
           {% for category in categories %}
@@ -244,7 +247,9 @@
           {% endfor %}
       </select>
       <a href="/admin/recipe/tag/add/?_to_field=id&_popup=1" style="display: block;" target="_blank">Add Tag</a>
-
+      <br><br><br>
+      <h3 style="display: inline-block;">Publish</h3>
+      <input type="checkbox" name="publish">
       <input type="text" id="changer" name="option" style="display: none;" value="">
 
       <div>
@@ -449,7 +454,7 @@ jQuery Library
 <script>
   tinymce.init({
     selector: 'textarea',
-    plugins: 'media image',
+    plugins: 'media image advlist lists',
     toolbar: 'media image',
     toolbar_mode: 'floating',
   });

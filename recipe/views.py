@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 import re, datetime
 from threading import Thread
 import time
+import smtplib
 
 flagger = False
 
@@ -25,10 +26,9 @@ def sitemap_updater():
     flagger = True
     while True:
         time.sleep(5) # use 80000 in production
-        print("in")
-        raider = requests.get('https://api.spoonacular.com/recipes/505103/information/?apiKey=98756d2aa51b45ad86ebac98e8bda863')
-        used = raider.headers['X-API-Quota-Used']
-        no_of_posts = int(used.split(".")[0])
+        # raider = requests.get('https://api.spoonacular.com/recipes/505103/information/?apiKey=98756d2aa51b45ad86ebac98e8bda863')
+        # used = raider.headers['X-API-Quota-Used']
+        # no_of_posts = int(used.split(".")[0])
         
         # params = {
         #     'apiKey': '98756d2aa51b45ad86ebac98e8bda863',
@@ -125,13 +125,26 @@ def sitemap_updater():
 
 
         f = open('sitemap.txt', 'w')
+        g = open('sitemap.xml', 'w')
+        h = open('sidebar_urls.txt', 'w')
+        g.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">')
         recipe_slugs = Recipe.objects.values('slug')
         blog_slugs = BlogPost.objects.values('slug')
         for i in recipe_slugs:
-            f.write("...../dish/" + i['slug'] + "\n")
+            f.write("..../dish/" + i['slug'] + "/" + "\n")
+            g.write('\n<url>\n<loc>{}</loc>\n</url>\n'.format("...../dish/" + i['slug'] + "/"))
         for j in blog_slugs:
             f.write('..../blog/' + j['slug'] + "\n")
+            g.write('\n<url>\n<loc>{}</loc>\n</url>\n'.format("...../dish/" + j['slug'] + "/"))
+        diet_slug = DietType.objects.all()
+        cuisine_slug = Cuisine.objects.all()
+        for k in diet_slug:
+            h.write("..../diettype/{}/\n".format(k.diettype))
+        for k in cuisine_slug:
+            h.write("..../cuisine/{}/\n".format(k.cuisine))
         f.close()
+        g.close()
+        h.close()
 
 def admin_1(request):
     if request.method == "POST":
@@ -184,6 +197,11 @@ def create_blog(request):
 
     else:
         title = request.POST['title']
+        try:
+            pub_stat = request.POST['publish']
+        except:
+            pub_stat = ""
+        side_rec = request.POST['recipe_sider']
         featimgurl = request.POST['imgurl']
         body = request.POST['body']
         author = request.POST['author']
@@ -211,7 +229,11 @@ def create_blog(request):
         if option == "preview":
             return render(request, "blog/blogpost.html", context)
         else:
-            BlogPost.objects.create(title=title, img=featimgurl, slug=slugify(unicode(title)), body=body, author=author)
+            if pub_stat == "on":
+                stat = True
+            else:
+                stat = False
+            BlogPost.objects.create(title=title, img=featimgurl, slug=slugify(unicode(title)), body=body, author=author, ass_recipe=side_rec, show=stat)
             blg_inst = BlogPost.objects.get(title=title)
             for tag in tags:
                 blg_inst.tags.add(tag)
@@ -366,7 +388,7 @@ def fetch(request):
         return render(request, "recipe/fetch.html")
 
 def index(request, page_no):
-    queryset = Recipe.objects.all().reverse()
+    queryset = Recipe.objects.all().order_by('-id')
     p = Paginator(queryset, 6)
     li = list(p.page_range)
     queryset = p.page(page_no).object_list
@@ -379,14 +401,15 @@ def index(request, page_no):
         nxt_pg = page_no
     if prv_pg < 1:
         prv_pg = 1
-    rand_blog = list(BlogPost.objects.all())
+    rand_blog = list(BlogPost.objects.filter(show=True))
     try:
         try:
             random_items = random.sample(rand_blog, 4)
         except:
-            random_items = random.sample(rand_blog, Recipe.objects.all().count())
+            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
     except:
         random_items = []
+    print(random_items)
     context = {
         'all_recipes': queryset,
         'tags': tags_qset,
@@ -406,7 +429,7 @@ def index1(request):
         t = Thread(target=sitemap_updater)
         t.start()
     page_no = 1
-    queryset = Recipe.objects.all().reverse()
+    queryset = Recipe.objects.all().order_by('-id')
     p = Paginator(queryset, 6)
     li = list(p.page_range)
     queryset = p.page(page_no).object_list
@@ -419,12 +442,12 @@ def index1(request):
         nxt_pg = page_no
     if prv_pg < 1:
         prv_pg = 1
-    rand_blog = list(BlogPost.objects.all())
+    rand_blog = list(BlogPost.objects.filter(show=True))
     try:
         try:
             random_items = random.sample(rand_blog, 4)
         except:
-            random_items = random.sample(rand_blog, BlogPost.objects.all().count())
+            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
     except:
         random_items = []
 
@@ -456,7 +479,20 @@ def recipe(request, r_name):
     return render(request, 'recipe/recipe.html', context)
 
 def contact(request):
-    return render(request, "recipe/contact.html")
+    if request.method == "GET":
+        return render(request, "recipe/contact.html")
+    else:
+        name = request.POST['name']
+        email = request.POST['email']
+        message = request.POST['message']
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login("codestrike20@gmail.com", "khalidown@2020")
+        server.sendmail("codestrike20@gmail.com", "donzaystone@outlook.com", "Hey, Dhaval you have got a message from \n{}\n{}\n\n{}\n\nRegards,\nKocina Blog.".format(name, email, message))
+        server.close()
+        return render(request, "recipe/contact.html", {"message": "Thankyou for your response."})
 
 offset = 0
 def filter_meals(request, meal_type):
@@ -582,7 +618,14 @@ def filter_meals(request, meal_type):
                 recipe_instance.instructions.add(step)
             r = Recipe.objects.get(title=title)
             query_list.append(r)
-
+    rand_blog = list(BlogPost.objects.filter(show=True))
+    try:
+        try:
+            random_items = random.sample(rand_blog, 4)
+        except:
+            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
+    except:
+        random_items = []
     queryset = query_list
     tags_qset = Tag.objects.all()
     cuisine = Cuisine.objects.all()
@@ -593,7 +636,8 @@ def filter_meals(request, meal_type):
         'tags': tags_qset,
         'cuisine': cuisine,
         'dietypes': diettypes,
-        'var_title': '{}'.format(meal_type + " recipes")
+        'var_title': '{}'.format(meal_type + " recipes"),
+        'rand_blog': list(random_items)
     }
 
     return render(request, 'recipe/index.html', context)
@@ -612,6 +656,14 @@ def filter_diettype(request, diettype, page_no):
         nxt_pg = page_no
     if prv_pg < 1:
         prv_pg = 1
+    rand_blog = list(BlogPost.objects.filter(show=True))
+    try:
+        try:
+            random_items = random.sample(rand_blog, 4)
+        except:
+            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
+    except:
+        random_items = []
     context = {
         'all_recipes': queryset,
         'tags': tags_qset,
@@ -619,7 +671,8 @@ def filter_diettype(request, diettype, page_no):
         'dietypes': diettypes,
         'var_title': '{}'.format(diettype + " recipes"),
         'next': "diettype/" + diettype + "/" + str(nxt_pg),
-        'prev': "diettype/" + diettype + "/" + str(prv_pg)
+        'prev': "diettype/" + diettype + "/" + str(prv_pg),
+        'rand_blog': list(random_items)
     }
     return render(request, 'recipe/index.html', context)
 
@@ -629,12 +682,21 @@ def filter_cuisine(request, cuisine):
     tags_qset = Tag.objects.all()
     cuisine = Cuisine.objects.all()
     diettypes = DietType.objects.all()
+    rand_blog = list(BlogPost.objects.filter(show=True))
+    try:
+        try:
+            random_items = random.sample(rand_blog, 4)
+        except:
+            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
+    except:
+        random_items = []
     context = {
         'all_recipes': queryset,
         'tags': tags_qset,
         'cuisine': cuisine,
         'dietypes': diettypes,
-        'var_title': '{}'.format(c + " recipes")
+        'var_title': '{}'.format(c + " recipes"),
+        'rand_blog': list(random_items)
     }
     return render(request, 'recipe/index.html', context)
 
@@ -765,18 +827,26 @@ def search(request):
                     query_list.append(r)
                 except:
                     pass
+    rand_blog = list(BlogPost.objects.filter(show=True))
+    try:
+        try:
+            random_items = random.sample(rand_blog, 4)
+        except:
+            random_items = random.sample(rand_blog, BlogPost.objects.all().count())
+    except:
+        random_items = []
 
     queryset = query_list
     tags_qset = Tag.objects.all()
     cuisine = Cuisine.objects.all()
     diettypes = DietType.objects.all()
-
     context = {
         'all_recipes': queryset,
         'tags': tags_qset,
         'cuisine': cuisine,
         'dietypes': diettypes,
-        'var_title': '{}'.format(query + " recipes")
+        'var_title': '{}'.format(query + " recipes"),
+        'rand_blog': list(random_items)
     }
 
     return render(request, 'recipe/index.html', context)
@@ -795,7 +865,14 @@ def tag_search(request, tag, page_no):
         nxt_pg = page_no
     if prv_pg < 1:
         prv_pg = 1
-
+    rand_blog = list(BlogPost.objects.filter(show=True))
+    try:
+        try:
+            random_items = random.sample(rand_blog, 4)
+        except:
+            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
+    except:
+        random_items = []
     context = {
         'all_recipes': queryset,
         'tags': tags_qset,
@@ -803,29 +880,38 @@ def tag_search(request, tag, page_no):
         'dietypes': diettypes,
         'var_title': '{}'.format(tag + " recipes"),
         'next': tag + "/" + str(nxt_pg),
-        'prev': tag + "/" + str(prv_pg)
+        'prev': tag + "/" + str(prv_pg),
+        'rand_blog': list(random_items)
     }
     return render(request, 'recipe/index.html', context)
 
 def editblog(request, blg_name):
     if request.method == "GET":
-        tags = Tag.objects.all()
-        categories = Category.objects.all()
-        blg_inst = BlogPost.objects.get(slug=blg_name)
-        context = {
-            'title': blg_inst.title,
-            'imgurl': blg_inst.img,
-            'body': blg_inst.body,
-            'author': blg_inst.author,
-            'tags': tags,
-            'categories': categories,
-            'slug': blg_inst.slug,
-            'username': request.user.username,
-        }
-        return render(request, "admin-1/editblog.html", context)
+        if request.user.is_authenticated:
+            tags = Tag.objects.all()
+            categories = Category.objects.all()
+            blg_inst = BlogPost.objects.get(slug=blg_name)
+            context = {
+                'title': blg_inst.title,
+                'imgurl': blg_inst.img,
+                'body': blg_inst.body,
+                'author': blg_inst.author,
+                'tags': tags,
+                'categories': categories,
+                'slug': blg_inst.slug,
+                'username': request.user.username,
+            }
+            return render(request, "admin-1/editblog.html", context)
+        else:
+            return HttpResponse(request, "You have to be an admin for this")
 
     else:
         title = request.POST['title']
+        try:
+            pub_stat = request.POST['publish']
+        except:
+            pub_stat = ""
+        side_rec = request.POST['recipe_sider']
         featimgurl = request.POST['imgurl']
         body = request.POST['body']
         author = request.POST['author']
@@ -853,12 +939,18 @@ def editblog(request, blg_name):
         if option == "preview":
             return render(request, "blog/blogpost.html", context)
         else:
+            if pub_stat == "on":
+                stat = True
+            else:
+                stat = False
             blg_inst = BlogPost.objects.get(slug=blg_name)
+            blg_inst.ass_recipe = side_rec
             blg_inst.title = title
             blg_inst.img = featimgurl
             blg_inst.body = body
             blg_inst.date = datetime.datetime.now()
             blg_inst.author = author
+            blg_inst.show = stat
             for tag in tags:
                 blg_inst.tags.add(tag)
             for category in categories:
@@ -866,17 +958,24 @@ def editblog(request, blg_name):
             blg_inst.save()
             return redirect("/admin-1/all-posts/")
 
+def delete_blog(request, blog_slug):
+    if request.user.is_authenticated:
+        BlogPost.objects.get(slug=blog_slug).delete()
+        return redirect("/admin-1/all-posts/")
+    else:
+        return HttpResponse(request, "You have to be an admin for this")
+
 def renderblog(request, blg_name):
     blg_inst = BlogPost.objects.get(slug=blg_name)
     tagger = blg_inst.tags.all()[0]
     rand_blog = list(BlogPost.objects.all())
     try:
-        side_blog = Recipe.objects.filter(title__contains=blg_inst.title)[0]
+        side_blog = Recipe.objects.filter(title__contains=blg_inst.ass_recipe)[0]
     except: 
         side_blog = Recipe.objects.filter(tags__tag=tagger)[0]
 
     try:
-        random_items = random.sample(rand_blog, 8)
+        random_items = random.sample(rand_blog, 6)
     except:
         random_items = random.sample(rand_blog, BlogPost.objects.all().count())
         

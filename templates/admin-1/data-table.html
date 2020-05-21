@@ -6,9 +6,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
   <meta name="description" content="Kode is a Premium Bootstrap Admin Template, It's responsive, clean coded and mobile friendly">
   <meta name="keywords" content="bootstrap, admin, dashboard, flat admin template, responsive," />
-  <title>Kode - Premium Bootstrap Admin Template</title>
+  <title>Konica | All Posts</title>
 
   <!-- ========== Css Files ========== -->
   <link href="{% static 'admin-1/css/root.css' %}" rel="stylesheet">
@@ -247,6 +248,8 @@
                         <th>Title</th>
                         <th>Author</th>
                         <th>Date</th>
+                        <th>Delete</th>
+                        <th>Published</th>
                     </tr>
                 </thead>
              
@@ -257,8 +260,10 @@
                         <td><a href="/blog/edit/{{blog.slug}}/">{{blog.title}}</a> </td>
                         <td>{{blog.author}}</td>
                         <td>{{blog.created}}</td>
-                  {% endfor %}
+                        <td><a href="/blog/delete/{{blog.slug}}/">Delete</a></td>
+                        <td>{{blog.show}}</td>
                     </tr>
+                  {% endfor %}
                 </tbody>
             </table>
 

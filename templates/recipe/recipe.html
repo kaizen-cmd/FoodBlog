@@ -10,13 +10,15 @@
 
 {% block smeta %}
 
+
+
 <meta property="og:title" content="{{recipe.title}}" />
 
 <meta property="og:url" content="/dish/{{recipe.slug}}/" />
 
 <meta property="og:description" content="{{recipe.descreption | striptags | safe}}" />
 
-<meta property="og:image" content="{{recipe.img_url}}" />
+<meta property="og:image" content="{{recipe.image_url}}" />
 
 <meta property="og:type" content="article" />
 
@@ -28,17 +30,18 @@
 
 <meta name="twitter:description" content="{{recipe.descreption | striptags | safe}}" />
 
-<meta name="twitter:image" content="{{recipe.img_url}}" />
+<meta name="twitter:image" content="{{recipe.image_url}}" />
 
 <meta itemprop="name" content="{{recipe.title}}" />
 
 <meta itemprop="description" content="{{recipe.descreption | striptags | safe}}" />
 
-<meta itemprop="image" content="{{recipe.img_url}}">
+<meta itemprop="image" content="{{recipe.image_url}}">
 
 {% endblock smeta %}
 
 {% block meta_kw %}
+How to make {{recipe.title}},
 {% for tag in recipe.tags.all %}
 {{tag}},
 {% endfor %}
@@ -87,16 +90,14 @@
       ],
     "video": [
         {
+        {% for i in links %}
         "@type": "VideoObject", 
-        "name": "How to make a Party Coffee Cake",
-        "description": "This is how you make a Party Coffee Cake.",
+        "name": "{{recipe.title}}",
+        "description": "{{recipe.descreption}}",
         "thumbnailUrl": [
-          "https://example.com/photos/1x1/photo.jpg",
-          "https://example.com/photos/4x3/photo.jpg",
-          "https://example.com/photos/16x9/photo.jpg"
+          {{recipe.image_url}}
          ],
-        "contentUrl": "http://www.example.com/video123.flv",
-        "embedUrl": "http://www.example.com/videoplayer.swf?video=123",
+        "embedUrl": "{{i}}",
         "uploadDate": "2018-02-05T08:00:00+08:00",
         "duration": "PT1M33S",
         "interactionStatistic": {
@@ -105,6 +106,7 @@
           "userInteractionCount": 2347
         },
         "expires": "2019-02-05T08:00:00+08:00"
+        {% endfor %}
        }
       ],
     "aggregateRating": {
@@ -112,7 +114,7 @@
         "ratingValue": "5",
         "ratingCount": "18"
         },
-    "review": {
+    <!-- "review": {
         "@type": "Review",
         "reviewRating": {
             "@type": "Rating",
@@ -127,7 +129,7 @@
         "reviewBody": "This cake is delicious!",
         "publisher": "The cake makery"
         }
-     }
+     } -->
 </script>
 {% endblock sdata %}
 
@@ -234,8 +236,8 @@
 
 <div style="text-align: center;">
   {% for i in  links %}
-  <div style="display: inline-block; margin: 0px 30px 10px 30px;">
-    <iframe width="400" height="300" src="{{i}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <div style="display: inline-block; margin: 0px 30px 10px 30px; border-radius: 20px;">
+    <iframe width="400" height="225" src="{{i}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 20px;"></iframe>
   </div>
   {% endfor %}
 </div>

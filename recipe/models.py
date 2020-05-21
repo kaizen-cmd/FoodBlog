@@ -65,6 +65,7 @@ class FeatureImage(models.Model):
 
 class BlogPost(models.Model):
     title = models.TextField(unique=True)
+    ass_recipe = models.TextField(blank=True)
     img = models.TextField()
     slug = models.SlugField()
     body = models.TextField()
@@ -72,3 +73,4 @@ class BlogPost(models.Model):
     categories = models.ManyToManyField(to=Category)
     tags = models.ManyToManyField(to=Tag)
     created = models.DateTimeField(auto_now_add=True)
+    show = models.BooleanField(default=False)
