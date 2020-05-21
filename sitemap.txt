@@ -20,6 +20,7 @@
 ..../dish/chevre-with-sauteed-grapes/
 ..../dish/chicken/
 ..../dish/chicken-65/
+..../dish/chicken-and-spinach-samosas/
 ..../dish/chicken-bbq/
 ..../dish/chicken-mac/
 ..../dish/chicken-pho/
@@ -74,6 +75,7 @@
 ..../dish/shrimp-biryani/
 ..../dish/spicy-samosa-wraps-with-tamarind-chutney/
 ..../dish/spicy-seasoned-loaded-guacamole/
+..../dish/spinach-samosas-with-indian-salad/
 ..../dish/sterling-cooper-blini-with-caviar/
 ..../dish/three-ingredient-frozen-pina-colada/
 ..../dish/tomato-cucumber-onion-salad-with-feta-cheese-real-convenience-food/

@@ -832,7 +832,7 @@ def search(request):
         try:
             random_items = random.sample(rand_blog, 4)
         except:
-            random_items = random.sample(rand_blog, BlogPost.objects.all().count())
+            random_items = random.sample(rand_blog, BlogPost.objects.filter(show=True).count())
     except:
         random_items = []
 
