@@ -121,30 +121,6 @@
 </div>
 
 
-<div style="text-align: center;">
-  <h1>Articles</h1>
-</div>
-
-<div style="text-align: center;">
-  <div class="uk-child-width-1-2 uk-child-width-1-4@s" data-uk-grid>
-  {% for rnd_blg in rand_blog %}
-  <div>
-    <div class="uk-card uk-card-video">
-      <div class="uk-inline uk-light">
-        <img class="uk-border-rounded-large" src="{{rnd_blg.img}}" alt="{{rnd_blg.title}}" style="width: 300; height: 400;">
-        <div class="uk-position-cover uk-card-overlay uk-border-rounded-large"></div>
-        <div class="uk-position-small uk-position-bottom-left">
-          <h5 class="uk-margin-small-bottom">{{rnd_blg.title}}</h5>
-          <div class="uk-text-xsmall">by {{rnd_blg.author}}</div>
-        </div>
-      </div>
-      <a href="/blog/{{rnd_blg.slug}}/" class="uk-position-cover"></a>
-    </div>
-  </div>
-  {% endfor %}
-  </div>
-</div>
-
 <br><br>
 
 <div class="uk-container">
