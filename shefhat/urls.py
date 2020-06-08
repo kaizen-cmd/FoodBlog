@@ -18,6 +18,8 @@ from django.urls import path, include
 from django.shortcuts import redirect
 
 urlpatterns = [
+    path('user/admin/', include('adminsection.urls')),
+    path('blog/', include('blog.urls')),
     path('admin/', admin.site.urls),
     path('', include('recipe.urls')),
 ]

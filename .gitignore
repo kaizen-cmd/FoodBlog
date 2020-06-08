@@ -1,6 +1,3 @@
 .vscode
 db.sqlite3
 *.pyc
-sidebar_urls.txt
-sitemap.txt
-sitemap.xml

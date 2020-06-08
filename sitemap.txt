@@ -85,5 +85,5 @@
 ..../dish/veg-biryani-recipe/
 ..../dish/vegan-pumpkin-pie-butter-cups/
 ..../dish/wholemeal-cake/
+..../blog/asdasdasd
 ..../blog/how-to-make-fried-rice
-..../blog/how-to-make-gulabjam

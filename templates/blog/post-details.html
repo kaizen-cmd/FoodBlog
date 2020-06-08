@@ -1,0 +1,758 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+    <!-- Page Title -->
+    <title>Shefhat Blog</title>
+    
+    <!---Font Icon-->
+    <link rel="stylesheet" href="{% static 'blog/css/fontawesome.all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/fontawesome.min.css' %}">
+    
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="shortcut icon" href="{% static 'blog/images/favicon.ico' %}">
+
+    <!-- Plugins css -->
+    <link rel="stylesheet" href="{% static 'blog/css/plugins.css' %}">
+    
+    <!-- Theme Style -->
+    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5ed498399ea8120012d82866&product=inline-share-buttons" async="async"></script>
+</head>
+<body>
+    <script
+    type="text/javascript"
+    async defer
+    src="//assets.pinterest.com/js/pinit.js"
+></script>
+    <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v7.0"></script>
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5ed498399ea8120012d82866&product=inline-follow-buttons&cms=website' async='async'></script>
+    <!--********************************************************-->
+    <!--********************* SITE HEADER **********************-->
+    <!--********************************************************-->
+    <header class="site-header header-style-six bg-image pb-100" style="background-image:url({% static 'blog/images/header-bg.png' %});">
+        <div class="site-logo-block">
+            <a class="navbar-brand site-logo" href="/blog/">
+                <img src="{% static 'blog/images/logo/logo-black2.png' %}" alt="logo">
+            </a>  
+        </div><!--~./ site-logo-block ~-->
+        
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Start Site Navigation
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div class="site-navigation">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="navbar navbar-expand-lg navigation-area">
+                            <div class="mainmenu-area">
+                                <nav class="menu">
+                                    <ul id="nav">
+                                        <li class="dropdown"><a href="/blog/">Home</a>
+                                            
+                                        </li>
+                                        <li class="dropdown-trigger"><a href="#">Categories</a>
+                                            <ul class="dropdown-content">
+                                                {% for category in extras.categories %}
+                                                <li><a href="/blog/category/{{category.category}}">{{category.category}}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav><!--/.menu-->
+                            </div><!--~./ mainmenu-wrap ~-->
+                            
+                            <div class="header-navigation-right">
+                                <div class="social-profile">
+                                    <ul class="social-share-two">
+                                        <li><a href="https://www.facebook.com/shefhat.official"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="https://twitter.com/Shef_Hat"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="https://www.instagram.com/shefhat.official/"><i class="fa fa-instagram"></i></a></li>
+                                    </ul>
+                                </div><!--~./ social-profile ~-->
+                                
+                                <div class="search-wrap">
+                                    <div class="search-btn">
+                                        <img src="{% static 'blog/images/icon/search.png' %}" alt="icon">
+                                        <span>Search</span>
+                                    </div>
+                                    <div class="search-form">
+                                        <form action="{% url 'HomePage' %}" method="GET">
+                                            <input type="search" placeholder="Search" name="query">
+                                            <button type="submit"><i class='fa fa-search'></i></button>
+                                        </form>
+                                    </div>
+                                </div><!--~./ search-wrap ~-->
+
+                                <ul class="nav-btns">
+                                    <li>
+                                        <a href="#" id="bt-show-sidebar"><i class="fa fa-bars"></i></a>
+                                    </li>
+                                </ul>
+                            </div><!--~./ header-navigation-right ~-->
+                        </div><!--~./ navigation-area ~-->
+                    </div>
+                </div>
+            </div>
+        </div><!--~./ site-navigation ~-->
+        
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Start Mobile Menu
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div class="mobile-menu">
+            <a class="mobile-logo" href="/blog/">
+                <img src="{% static 'blog/images/logo/logo-black.png' %}" alt="logo">
+            </a>
+        </div><!--~~./ end mobile menu ~~-->
+    </header>
+    <!--~./ end site header ~-->
+        
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Start Mobile Menu
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div class="mobile-menu">
+            <a class="mobile-logo" href="/blog/">
+                <img src="{%static 'blog/images/logo/logo-black.png' %}" alt="logo">
+            </a>
+        </div><!--~~./ end mobile menu ~~-->
+    </header>
+    <!--~./End site header ~-->
+    
+    
+    <!--********************************************************-->
+    <!--********************* SITE CONTENT *********************-->
+    <!--********************************************************-->
+    <br><br>
+        <div class="frontpage-slider-posts slider-style-three slider-style-five">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="frontpage-slider" class="owl-carousel frontpage-slider-three carousel-nav-align-center">
+                            <article class="slider-item">
+                                <figure class="slider-thumb">
+                                    <img src="{{blog.feat_img}}" alt="{{blog.title}}" style="width: 1170px; height: 600px;"> 
+                                </figure><!--./ slider-thumb -->
+                                <div class="content-entry-wrap">
+                                    <div class="content-entry-wrap-inner">
+                                        <div class="content-entry-wrap-inner-inner">
+                                            <div class="entry-content">
+                                                <h3 class="entry-title">
+                                                    <a href="/blog/{{blog.slug}}/">{{blog.title}}</a>
+                                                </h3><!--./ entry-title -->
+                                            </div><!--./ entry-content -->
+
+                                            <div class="entry-meta-content">
+                                                <div class="entry-date">
+                                                    <span>{{blog.date}}</span>
+                                                </div><!--./ entry-date -->
+                                                <div class="entry-views">
+                                                    <span>{{blog.time_to_read}} mins</span>
+                                                </div><!--./ entry-views -->
+                                                <div class="entry-category">
+                                                    {% for category in blog.category.all %}
+                                                    <a class="cat" href="/blog/category/{{category.category}}">{{category.category}}</a>
+                                                    {% endfor %}
+                                                </div><!--./ entry-category -->
+                                            </div><!--./ entry-meta-content -->
+                                        </div><!--./ content-entry-wrap-inner -->
+                                    </div><!--./ content-entry-wrap -->
+                                </div>
+                            </article><!--./ slider-item -->
+                             
+                        </div><!--/#frontpage-slide --> 
+                    </div>
+                </div>
+            </div>
+        </div><!--~./End frontpage slider posts ~-->
+        
+        <!--~~~~~ Start Main Wrapper ~~~~~-->
+        <div class="main-wrapper ptb-80">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <!--~~~~~ Start Site Main ~~~~~-->
+                        <main class="site-main">
+                            <div class="post single-post single-post-one">
+                                <div class="post-share-area">
+                                    <h3 id="counter">{{blog.shares}}<span>SHARES</span></h3>
+                                    <div class="share">
+                                        <a class="facebook upcount" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2Fshefhat.official&display=popup&ref=plugin&src=like&kid_directed_site=0" target="_blank">
+                                            <span class="fa fa-facebook"></span>
+                                            <span class="text">SHARE POST</span>
+                                        </a>
+
+                                        <a class="twitter upcount" href="https://twitter.com/intent/tweet?screen_name=Shef_Hat&ref_src=twsrc%5Etfw">
+                                            <span class="fa fa-twitter"></span>
+                                            <span class="text">TWEET POST</span>
+                                        </a>
+                                        <a class="google upcount" href="https://www.instagram.com/shefhat.official/" target="_blank">
+                                            <span class="fa fa-instagram"></span>
+                                            <span class="text">SHARE POST</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <script>
+
+                                    function getCookie(name) {
+                                        var cookieValue = null;
+                                        if (document.cookie && document.cookie !== '') {
+                                            var cookies = document.cookie.split(';');
+                                            for (var i = 0; i < cookies.length; i++) {
+                                            var cookie = cookies[i].trim();
+                                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                                break;
+                                            }
+                                            }
+                                        }
+                                        return cookieValue;
+                                        }
+
+                                    var sharecount = '{{blog.shares}}';
+                                    sharecount = parseInt(sharecount, 10);
+                                    document.getElementsByClassName('upcount')[0].addEventListener('click', increment);
+                                    document.getElementsByClassName('upcount')[1].addEventListener('click', increment);
+                                    document.getElementsByClassName('upcount')[2].addEventListener('click', increment);
+                                    function increment() {
+                                        sharecount++;
+                                        console.log('Here');
+                                        fetch(`${window.location['href']}`, {
+                                            method: "POST",
+                                            credentials: "include",
+                                            cache: "no-cache",
+                                            body: JSON.stringify({
+                                            'share_count': sharecount.toString(10),
+                                            }),
+                                            headers: new Headers({
+                                            'content-type': 'application/json',
+                                            'X-CSRFToken': getCookie('csrftoken')
+                                            })
+                                            
+                                        })
+                                        .then(function (response) {
+                                            response.json().then(function (data) {
+                                                console.log(data);
+                                                document.getElementById('counter').innerHTML = `${data['shares']}` + '<span>SHARES</span>';
+                                            })
+                                        }) 
+                                    }
+                                </script>
+
+                                <div class="entry-content">
+                                    {{blog.body | safe}}
+                                    <div>
+                                        <div class="col-lg-6" style="margin: 0 auto;">
+                                            
+                                            <aside class="widget bt-widget-categories bt-widget-categories-two">
+                                                <div class="widget-content">
+                                                    
+                                                    {% for recipe in blog.recipe.all %}
+                                                    <div style="text-align: center;">
+                                                        <h3>This Recipe might interest you</h3>
+                                                    </div>
+                                                    <a href="/dish/{{recipe.slug}}" class="cat-item">
+                                                        <div class="cat-item-inner">
+                                                            <div class="cat-thumb">
+                                                                <img src="{{recipe.image_url}}" alt="{{recipe.title}}">
+                                                            </div>
+                                                            <div class="cat-name">
+                                                                <span>{{recipe.title}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </a><!--~./ cat-item ~-->
+                                                    {% endfor %}
+                                                </div>
+                                            </aside><!--~./ end bt widget categories ~-->
+                                        </div>
+                                        <div class="entry-footer mt-60">
+                                            <div class="entry-tag">
+                                                {% for keyword in blog.keywords.all %}
+                                                <a href="" rel="tag">{{keyword.keyword}}</a>
+                                                {% endfor %}
+                                            </div><!--/.entry-tag-->
+                                        </div><!--/.entry-footer-->
+                                    </div>
+                                </div>
+                                    
+
+                            <!--~~~~~ Start Add Banner ~~~~~--> 
+                            <div class="add-banner bg-gray ptb-20">           
+                                <div class="add-content text-center">
+                                    <a title="add" href="#">
+                                        <img src="http://via.placeholder.com/728x90" alt="add">
+                                    </a>
+                                </div>
+                            </div><!--~./ end add banner ~-->
+
+                            <!--~~~~~ Start Related Post ~~~~~--> 
+                            <div class="related-post pt-80 mb-30">
+                                <h3 class="headline">You Might Also Like</h3>
+                                <div class="row">
+                                    <!--~~~~~ Start Post ~~~~~-->
+                                    {% for blog in similar_posts %}
+                                    <div class="col-12">
+                                        <article class="post hentry post-list">
+                                            <div class="entry-thumb">
+                                                <figure class="thumb-wrap">
+                                                    <a href="/blog/{{blog.slug}}/">
+                                                        <img src="{{blog.feat_img}}" alt="{{blog.title}}" style="width: 100%; height: 250px;">
+                                                    </a>
+                                                </figure><!--./ thumb-wrap -->
+                                            </div><!--./ entry-thumb -->
+                                            <div class="content-entry-wrap">
+                                                <div class="entry-content">
+                                                    <h3 class="entry-title">
+                                                        <a href="/blog/{{blog.slug}}/">{{blog.title}}</a>
+                                                    </h3><!--./ entry-title -->
+                                                </div><!--./ entry-content -->
+                                                <div class="entry-meta-content">
+                                                    <div class="entry-meta-author">
+                                                        <div class="entry-author-name">
+                                                            <a href="#">{{blog.author}}</a>
+                                                        </div>
+                                                    </div><!--./ entry-meta-author -->
+                                                    <div class="entry-date">
+                                                        <span>{{blog.date}}</span>
+                                                    </div><!--./ entry-date -->
+                                                    <div class="entry-views">
+                                                        <span>{{blog.time_to_read}}</span>
+                                                    </div><!--./ entry-date -->
+                                                    <div class="entry-category">
+                                                        {% for category in blog.category.all %}
+                                                        <a class="cat" href="/blog/category/{{category.category}}/">{{category.category}}</a>
+                                                        {% endfor %}
+                                                    </div><!--./ entry-category -->
+                                                </div><!--./ entry-meta-content -->
+                                                <div class="entry-summary">
+                                                    <p>{{blog.meta_descreption | safe}}</p>
+                                                </div>
+                                            </div><!--./ content-entry-wrap -->
+                                        </article>
+                                    </div><!--~./ end post ~-->
+                                    {% endfor %}
+
+                                </div> <!-- /.row -->    
+                            </div> <!--~./ end related post ~-->
+
+                            <h3>Comments</h3>
+                            <br>
+                            {% for comment in blog.comments.all %}
+                            <div class="entry-meta-content">
+                                <div class="entry-meta-author">
+                                    <div class="entry-author-thumb">
+                                        <img class="avatar photo" src="{% static 'blog/images/author/1.jpg' %}" alt="author">
+                                    </div>
+                                    <div class="entry-author-name">
+                                        {% for user in comment.user.all %}
+                                        <a href="#">{{user.username}}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div><!--./ entry-meta-author -->
+                                <div class="entry-date">
+                                    <span>{{comment.date}}</span>
+                                </div><!--./ entry-date -->
+                            </div><!--./ entry-meta-content -->
+                            <div class="entry-summary">
+                                <p>{{comment.comment}}</p>
+                            </div>
+                            <br><br>
+                            {% endfor %}
+
+
+
+                            
+                            {% if user.is_authenticated %}
+                            <!--~~~~~ Start Comments Area ~~~~~-->
+                            <div class="comments-area" id="comments">
+                                <div class="comment-respond" id="respond">
+                                    <h3 class="comment-reply-title headline"><span>Leave a Reply</span></h3>
+
+                                    <form name="contactForm" id='contact_form' method="post" action='/blog/{{blog.slug}}/'>
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <p>
+                                                    <textarea name='message' id='message' class="form-controllar" aria-required="true" rows="8" cols="45" placeholder="Write a Comment...." required></textarea>
+                                                </p>
+                                            </div>
+                                            
+                                            <div class="col-md-12">
+                                                <p class="form-submit">
+                                                    <input type="submit" value="Post Comment" id="submit" name="submit">
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </form>   
+                                </div><!-- #respond -->      
+                            </div> <!--~./ end comments area ~-->
+                            {% else %}
+                            <div class="comments-area" id="login-form">
+                                <div class="comment-respond" id="respond">
+                                    <h3 class="comment-reply-title headline"><span>Login to comment</span></h3>
+
+                                    <form name="contactForm" id='contact_form' method="post" action='/blog/{{blog.slug}}/'>
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            
+                                            <div class="col-lg-6">
+                                                <p>
+                                                    <input type='text' name='l_username' id='name' class="form-controllar"  aria-required="true" placeholder="Userame*" required>
+                                                </p>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <p>
+                                                    <input type='password' name='l_password' id='url' class="form-controllar"  aria-required="true" placeholder="Password*" required>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p class="form-submit">
+                                                    <input type="submit" value="Login" id="submit" name="submit">
+                                                </p>
+                                            </div>
+                                            
+                                        </div>
+                                    </form>   
+                                </div><!-- #respond -->      
+                            </div> <!--~./ end comments area ~-->
+
+
+                            <br><br>
+                            <a id="register-btn">Not a user ?</a>
+                            
+                            <style>
+                                #register-btn:hover {
+                                    cursor: pointer;
+                                    color: blue;
+                                }
+                                #go-back {
+                                    display: none;
+                                    cursor: pointer;
+                                    color: blue;
+                                }
+                            </style>
+
+
+                            <div class="comments-area" id="register-form" style="display: none;">
+                                <div class="comment-respond" id="respond">
+                                    <h3 class="comment-reply-title headline"><span>Register</span></h3>
+
+                                    <form name="contactForm" id='contact_form' method="post" action='/blog/{{blog.slug}}/'>
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            
+                                            <div class="col-lg-4">
+                                                <p>
+                                                    <input type='text' name='r_username' id='name' class="form-controllar"  aria-required="true" placeholder="Userame*" required>
+                                                </p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <p>
+                                                    <input type='text' name='r_email' id='name' class="form-controllar"  aria-required="true" placeholder="Email*" required>
+                                                </p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <p>
+                                                    <input type='password' name='r_password' id='url' class="form-controllar"  aria-required="true" placeholder="Password*">
+                                                </p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p class="form-submit">
+                                                    <input type="submit" value="Register" id="submit" name="submit" required>
+                                                </p>
+                                            </div>
+                                            
+                                        </div>
+                                    </form>   
+                                </div><!-- #respond -->      
+                            </div> <!--~./ end comments area ~-->
+                            <br><br>
+                            <a id="go-back">Login</a>
+
+                            <script>
+                                document.getElementById('register-btn').addEventListener('click', function () {
+                                    document.getElementById('login-form').style.display = "none";
+                                    document.getElementById('register-form').style.display = "block";
+                                    this.style.display = "none";
+                                    document.getElementById('go-back').style.display = "block";
+                                })
+                                document.getElementById('go-back').addEventListener('click', function () {
+                                    document.getElementById('login-form').style.display = "block";
+                                    document.getElementById('register-form').style.display = "none";
+                                    this.style.display = "none";
+                                    document.getElementById('register-btn').style.display = "block";
+                                })
+                            </script>
+
+                            {% endif %}
+                        </main>
+                        <!--~./ end site main ~-->
+                    </div>
+
+                    <!--~~~~~ Start sidebar ~~~~~-->
+                    <div class="col-lg-3">
+                        <div class="sidebar sidebar-style-two">
+                            <!--~~~~~ Start Bt Social Widget~~~~~-->
+                            <aside class="widget bt-socail-widget bt-socail-widget-two">
+                                <div class="widget-content">
+                                    <div class="bt-socail-profile">
+                                        
+                                        
+
+                                        <a href="https://twitter.com/Shef_Hat?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="true" data-size="large">Follow @Shef_Hat</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+                                        <div style="display: block; margin-bottom: 5px;">
+                                            <a href="https://www.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark" data-pin-count="beside" data-pin-tall="true">
+                                            </a>
+                                        </div>
+
+                                        <div class="fb-like" data-href="https://www.facebook.com/shefhat.official" data-width="" data-layout="button_count" data-action="like" data-size="large" data-share="true"></div>
+
+                                        <div style="margin-top: 5px;">
+                                            <a href="https://www.instagram.com/shefhat.official/" class="btn btn-sm" target="_blank">
+                                              <i class="fab fa-instagram"></i>
+                                              <span>ShefHat.official</span>
+                                            </a>
+                                        </div>
+                                    </div><!--~./ bt-socail-profile ~-->
+                                </div>
+                            </aside><!--~./ end bt social widget ~-->
+                            
+                            <!--~~~~~ Start Popular Posts Widget~~~~~-->
+                            <aside class="widget popular-posts-widget">
+                                <h4 class="widget-title"><span>More to read</span></h4>
+                                <div class="widget-content">
+                                    {% for blog in extras.random_blogs %}
+                                    <article class="post side-post">
+                                        <div class="thumb-wrap">
+                                            <a href="/blog/{{blog.slug}}/">
+                                                <img src="{{blog.feat_img}}" alt="{{blog.title}}" style="width: 100%; height: 100px;">
+                                            </a>
+                                        </div><!--./ thumb-wrap -->
+                                        <div class="content-entry-wrap">
+                                            <h3 class="entry-title">
+                                                <a href="/blog/{{blog.title}}">{{blog.title}}</a>
+                                            </h3><!--./ entry-title -->
+                                            <div class="entry-meta-content">
+                                                <div class="entry-date">
+                                                    <span>{{blog.date}}</span>
+                                                </div><!--./ entry-date -->
+                                            </div><!--./ entry-meta-content -->
+                                        </div>
+                                    </article><!--./ end post -->
+                                    {% endfor %}
+                                </div>
+                            </aside><!--~./ end popular posts widget ~-->
+                              
+                            <!--~~~~~ Start Bt Widget Categories~~~~~-->
+                            <aside class="widget bt-widget-categories bt-widget-categories-two">
+                                <div class="widget-content">
+                                    {% for category in extras.categories|slice:":3" %}
+                                    <a href="/blog/category/{{category.category}}" class="cat-item">
+                                        <div class="cat-item-inner">
+                                            <div class="cat-thumb">
+                                                <img src="{{category.img}}" alt="img">
+                                            </div>
+                                            <div class="cat-name">
+                                                <span>{{category}}</span>
+                                            </div>
+                                        </div>
+                                    </a><!--~./ cat-item ~-->
+                                    {% endfor %}
+                                    
+                                </div>
+                            </aside><!--~./ end bt widget categories ~-->
+                               
+                            <!--~~~~~ Start Subscribe Widget~~~~~-->
+                            <aside class="widget tb-subscribe-widget">
+                                <div class="widget-content">
+                                    <div class="subscribe-box">
+                                        <div class="icon">
+                                            <img src="{% static 'blog/images/icon.png' %}" alt="email-icon">
+                                        </div>
+                                        <p>Subscribe to our mailing list to get the new updates!</p>
+                                        <div class="subscribe-form">
+                                            <!-- Subscribe form -->
+                                            <form class="dv-form" id="mc-form" action="/blog/{{blog.title}}/" method="POST">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <input id="mc-email" placeholder="Email Address" type="email" name="email" required>
+                                                    <button class="btn btn-primary" name="Subscribe" id="subscribe-btn" type="submit">Subscribe Now</button>
+                                                </div>
+                                            </form>
+                                         </div>
+                                    </div>
+                                </div>
+                            </aside><!--~./ end subscribe widget ~-->
+                            
+                            <!--~~~~~ Start Review Posts Widget~~~~~-->
+                            <aside class="widget tb-review-posts-widget">
+                                <h4 class="widget-title"><span>Other Posts</span></h4>
+                                <div class="widget-content">
+
+                                    {% for blog_title in extras.random_title_only_blogs %}
+                                    <article class="post side-post">
+                                        <div class="post-review-rating">
+                                            <div class="progress">
+                                                <img src="{{blog_title.feat_img}}" alt="{{blog_title.title}}" style="border-radius: 50%;">
+                                            </div>
+                                        </div><!--./ post-review-rating -->
+                                        <div class="content-entry-wrap">
+                                            <h3 class="entry-title">
+                                                <a href="/blog/{{blog_title.slug}}/">{{blog_title.title}}</a>
+                                            </h3><!--./ entry-title -->
+                                            <div class="entry-meta-content">
+                                                <div class="entry-date">
+                                                    <span>{{blog_title.date}}</span>
+                                                </div><!--./ entry-date -->
+                                            </div><!--./ entry-meta-content -->
+                                        </div>
+                                    </article><!--./ end post -->
+                                    {% endfor %}
+
+                                    
+                                </div>
+                            </aside><!--~./ end review posts widget ~-->
+                        </div>
+                    </div><!--~./ end sidebar ~-->
+                </div>
+            </div>
+        </div><!--~./ end main wrapper ~--> 
+    </div>
+    <!--~./ end site content ~--> 
+    
+    
+      
+    <!--********************************************************-->
+    <!--****************** MAGALA SIDE SIDEBAR *****************-->
+    <!--********************************************************-->
+    <div class="magala-side-sidebar tse-scrollable">
+        <div class="tse-content">
+            <a href="#" class="sidebar-close-button" tabindex="0"><i class="fa fa-close"></i></a>
+            <div class="sidebar">
+                <!--~~~~~ Start Popular Posts Widget~~~~~-->
+                <aside class="widget popular-posts-widget">
+                    <h4 class="widget-title"><span>Recent Post</span></h4>
+                    <div class="widget-content">
+                        {% for post in extras.trending_blogs %}
+                        <article class="post side-post">
+                            <div class="thumb-wrap">
+                                <a href="/blog/{{post.slug}}/">
+                                    <img src="{{post.feat_img}}" alt="{{post.title}}" style="width: 100%; height: 100px;">
+                                </a>
+                            </div><!--./ thumb-wrap -->
+                            <div class="content-entry-wrap">
+                                <h3 class="entry-title">
+                                    <a href="/blog/{{post.slug}}/">{{post.title}}</a>
+                                </h3><!--./ entry-title -->
+                                <div class="entry-meta-content">
+                                    <div class="entry-date">
+                                        <span>{{post.date}}</span>
+                                    </div><!--./ entry-date -->
+                                </div><!--./ entry-meta-content -->
+                            </div>
+                        </article><!--./ end post -->
+                        {% endfor %}
+                    </div>
+                </aside><!--~./ end popular posts widget ~-->
+            </div>
+        </div>
+    </div>
+    <div class="magala-close-all-window"></div>
+    <!--~./ end magala side sidebar ~-->
+    
+    
+    <!--********************************************************-->
+    <!--********************** SITE FOOTER *********************-->
+    <!--********************************************************-->
+    <footer class="site-footer footer-default-style footer-style-two ptb-40">
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Start Footer Widget Area
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div class="footer-widget-area">
+            <div class="container">
+                <div class="row">
+                    <!--~~~~~ Start Widget About us Info ~~~~~--> 
+                    <div class="col-lg-6">
+                        <aside class="widget bt-about-us-widget">
+                            <div class="widget-content">
+                                <div class="about-logo">
+                                    <a href="/blog/"><img src="{% static 'blog/images/logo/footer-logo-black.png' %}" alt="Logo"></a>
+                                </div>
+                                <p>Sitting on a working-class comme dows of an easy above-ground rail line group called Make the Road New York's busy street</p>
+                            </div>
+                        </aside>
+                    </div><!--~./ end about us widget ~-->
+                    
+                    <!--~~~~~ Start Widget link ~~~~~--> 
+                    <div class="col-lg-3">
+                        <aside class="widget widget-list">
+                            <div class="widget-content">
+                                <ul class="list">
+                                    <li><a href="#">Advertise</a></li>
+                                    <li><a href="#">Forum</a></li>
+                                    <li><a href="#">BuddyPress</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                </ul>
+                            </div>
+                        </aside>
+                    </div><!--~./ end widget link ~-->
+                    
+                    <!--~~~~~ Start Social Profile Widget ~~~~~--> 
+                    <div class="col-lg-3">
+                        <aside class="widget bt-social-profile-widget">
+                            <div class="widget-content">
+                                <div class="social-profile text-right">
+                                    <ul class="social-share-two">
+                                        <li><a href="https://www.facebook.com/shefhat.official"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="https://twitter.com/Shef_Hat"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="https://www.instagram.com/shefhat.official/"><i class="fa fa-instagram"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </aside>
+                    </div><!--~./ end social profile widget ~-->
+                </div>
+            </div>
+        </div>
+        <!--~./ end footer widgets area ~-->
+    </footer>
+    <!--~./ end site footer ~-->
+    
+    <!-- jQuery js -->
+    <script>
+        window.onload = function () {
+            document.querySelector('.owl-prev').style.display = "none";
+            document.querySelector('.owl-next').style.display = "none"; 
+        }
+        
+    </script>
+    <script src="{% static 'blog/js/jquery.min.js' %}"></script>
+    <!-- Bootstrap js -->
+    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'blog/js/popper.min.js' %}"></script>
+    <!-- Owl carousel js -->
+    <script src="{% static 'blog/js/owl.carousel.min.js' %}"></script>
+    <!-- Masonary js -->
+    <script src="{% static 'blog/js/masonary.min.js' %}"></script>
+    <!-- News Ticker js -->
+    <script src="{% static 'blog/js/breaking-news-ticker.min.js' %}"></script>
+    <!-- Trackpad Scroll js -->
+    <script src="{% static 'blog/js/jquery.trackpad-scroll-emulator.min.js' %}"></script>
+    <!-- Sticky ResizeSensor js -->
+    <script src="{% static 'blog/js/ResizeSensor.min.js' %}"></script>
+    <!-- Sticky Sidebar js -->
+    <script src="{% static 'blog/js/theia-sticky-sidebar.min.js' %}"></script>
+    <!-- Plugin js -->
+    <script src="{% static 'blog/js/plugins.js' %}"></script>
+    <!-- main js -->
+    <script src="{% static 'blog/js/main.js' %}"></script>
+</body>
+</html>
